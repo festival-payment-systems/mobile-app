@@ -1,10 +1,12 @@
 import {type ReactNode, useEffect, useState} from "react";
-import {linkBridge, type ParserSchema} from "@webview-bridge/web";
+import {type Bridge, type BridgeStore, linkBridge} from "@webview-bridge/web";
 import {Box, Button, Typography} from "@mui/material";
 import {MotionBox} from "../Motion.tsx";
 import {setAppBarVisible} from "../../hooks/Navigation.ts";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
+import type {TagEvent} from "../../types/common.ts";
+import type {AppSchema} from "../../../../Bridge.ts";
 
 function NfcReadScreen() {
 
@@ -122,7 +124,11 @@ interface Props {
   neededRole: 'Organizer' | 'Merchant' | 'Seller' | 'Cashier' | 'Customer',
 }
 
-const bridge = linkBridge({
+interface BridgeState extends Bridge {
+  getNfc: () => Promise<TagEvent | null>
+}
+
+const bridge = linkBridge<BridgeStore<BridgeState>, AppSchema>({
   throwOnError: true,
   onReady: async (method) => {
     if (method.isWebViewBridgeAvailable)
@@ -139,7 +145,8 @@ function NfcProtected({ children, neededRole }: Props) {
   useEffect(() => {
     setAppBarVisible(!!nfcData)
     if (!nfcData) {
-      bridge.getNfc()
+      // This does not always return the tag, that's why we use the event listener
+      bridge.getNfc().then((tag) => console.log('Nfc reading done ', tag))
     }
 
     return () => {

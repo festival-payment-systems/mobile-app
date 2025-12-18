@@ -1,7 +1,8 @@
 import {StatusBar, StyleSheet, useWindowDimensions, View} from 'react-native';
-import NfcManager, { NfcTech } from 'react-native-nfc-manager';
+import NfcManager, { NfcTech, TagEvent } from 'react-native-nfc-manager';
 import {
-  bridge,
+  Bridge,
+  bridge, BridgeStore,
   createWebView,
   postMessageSchema,
 } from '@webview-bridge/react-native';
@@ -11,7 +12,11 @@ import AppConfig from "./config.ts";
 
 NfcManager.start().then(() => console.log('NfcManager started'));
 
-export const appBridge = bridge({
+interface BridgeState extends Bridge {
+  getNfc: () => Promise<TagEvent | null>
+}
+
+export const appBridge = bridge<BridgeState>({
   async getNfc() {
     try {
 
