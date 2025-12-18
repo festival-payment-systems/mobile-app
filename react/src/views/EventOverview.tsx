@@ -60,15 +60,12 @@ function EventOverview() {
   })
 
   useEffect(() => {
+    setRouteTitle(t('dashboard'))
     if (EventQuery.isSuccess)
       setSelectedEventName(EventQuery.data.name)
     else
       setSelectedEventName('')
   }, [EventQuery.data, EventQuery.error]);
-
-  useEffect(() => {
-    setRouteTitle(t('dashboard'))
-  }, []);
 
   if (!eventId) return <Navigate to={'/events'}/>
 

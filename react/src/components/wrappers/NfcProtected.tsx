@@ -7,6 +7,7 @@ import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import type {TagEvent} from "../../types/common.ts";
 import type {AppSchema} from "../../../../Bridge.ts";
+import {useAppState} from "../../hooks/AppState.ts";
 
 function NfcReadScreen() {
 
@@ -131,15 +132,19 @@ interface BridgeState extends Bridge {
 const bridge = linkBridge<BridgeStore<BridgeState>, AppSchema>({
   throwOnError: true,
   onReady: async (method) => {
-    if (method.isWebViewBridgeAvailable)
+    useAppState.setState({isBridgeReady: method.isWebViewBridgeAvailable})
+    if (method.isWebViewBridgeAvailable) {
       console.log(`bridge is ready`)
-    else
+    } else {
       console.warn(`bridge is NOT ready`)
+    }
   }
 })
 
 function NfcProtected({ children, neededRole }: Props) {
 
+  const App = useAppState()
+  const nav = useNavigate()
   const [nfcData, setNfcData] = useState<object | null>(null)
 
   useEffect(() => {
@@ -160,6 +165,11 @@ function NfcProtected({ children, neededRole }: Props) {
       setNfcData(data)
     })
   }, []);
+
+  if (!App.isBridgeReady) {
+    nav(-1)
+    return <h3>No NFC connection found.</h3>
+  }
 
   if (!nfcData) return (
     <NfcReadScreen/>

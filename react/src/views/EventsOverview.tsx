@@ -17,10 +17,12 @@ import {useTranslation} from "react-i18next";
 import {sortByStatusProps} from "../utils/EventUtils.ts";
 import {useNavigate} from "react-router";
 import NfcIcon from '@mui/icons-material/Nfc';
+import {useAppState} from "../hooks/AppState.ts";
 
 
 function EventsOverview() {
 
+  const App = useAppState()
   const nav = useNavigate()
   const { t } = useTranslation()
   const theme = useTheme()
@@ -78,25 +80,27 @@ function EventsOverview() {
         </MotionFab>
       </Tooltip>
 
-      <Tooltip title={'NFC Test'} arrow placement={'auto'}>
-        <MotionFab
-          color="secondary"
-          aria-label={'NFC Test'}
-          sx={{
-            position: 'fixed',
-            bottom: isMobile ? 20 : 40,
-            left: isMobile ? 20 : 40,
-            width: isMobile ? 56 : 70,
-            height: isMobile ? 56 : 70,
-          }}
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.5 }}
-          onClick={() => nav('/nfc-test')}
-        >
-          <NfcIcon fontSize={isMobile ? 'medium' : 'large'} />
-        </MotionFab>
-      </Tooltip>
+      {App.isBridgeReady && (
+        <Tooltip title={'NFC Test'} arrow placement={'auto'}>
+          <MotionFab
+            color="secondary"
+            aria-label={'NFC Test'}
+            sx={{
+              position: 'fixed',
+              bottom: isMobile ? 20 : 40,
+              left: isMobile ? 20 : 40,
+              width: isMobile ? 56 : 70,
+              height: isMobile ? 56 : 70,
+            }}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.5 }}
+            onClick={() => nav('/nfc-test')}
+          >
+            <NfcIcon fontSize={isMobile ? 'medium' : 'large'} />
+          </MotionFab>
+        </Tooltip>
+      )}
 
       <EventCreation open={eventCreation} onClose={() => setEventCreation(false)} />
     </Container>

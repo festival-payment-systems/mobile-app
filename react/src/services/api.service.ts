@@ -26,7 +26,7 @@ api.interceptors.response.use(
 
     // No response => server not reachable
     if (!error.response) {
-      console.error('Server is unreachable!')
+      console.error('Server is unreachable!', error)
       return Promise.reject(error)
     }
 
