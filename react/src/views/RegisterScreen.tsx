@@ -1,0 +1,97 @@
+import {useAuthState} from "../hooks/AuthState.ts";
+import {Box, Button, Card, CardContent, Link, TextField, Typography} from "@mui/material";
+import {useEffect, useState} from "react";
+import {useNavigate} from "react-router";
+import {useWindowSize} from "../hooks/Window.ts";
+import { useTranslation } from "react-i18next";
+
+
+function RegisterScreen() {
+
+  const Auth = useAuthState()
+  const nav = useNavigate()
+  const { width } = useWindowSize()
+  const { t } = useTranslation()
+
+  const [firstName, setFirstName] = useState<string>('')
+  const [lastName, setLastName] = useState<string>('')
+  const [email, setEmail] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
+  const [confirmPassword, setConfirmPassword] = useState<string>('')
+  const [error, setError] = useState<string>('')
+
+  const handleRegister = async () => {
+    const errorMsg = await Auth.register(email, password, firstName, lastName)
+    if (errorMsg) setError(errorMsg)
+    else nav('/login')
+  }
+
+  useEffect(() => {
+    setError('')
+  }, [firstName, lastName, email, password, confirmPassword]);
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Card elevation={6} sx={{borderRadius: width <= 512 ? 0 : 4, maxWidth: 512, width: '100vw'}}>
+        <CardContent sx={{display: "flex", flexDirection: "column", gap: 3}}>
+          <Typography variant="h5" align="center" fontWeight={600}>
+            {t('create an account')}
+          </Typography>
+
+          <TextField
+            label={t('first name')} type="text" fullWidth variant="outlined" error={!!error}
+            value={firstName} onChange={e => setFirstName(e.currentTarget.value)}
+          />
+
+          <TextField
+            label={t('last name')} type="text" fullWidth variant="outlined" error={!!error}
+            value={lastName} onChange={e => setLastName(e.currentTarget.value)}
+          />
+
+          <TextField
+            label={t('email')} type="email" fullWidth variant="outlined" error={!!error}
+            value={email} onChange={e => setEmail(e.currentTarget.value)}
+          />
+
+          <TextField
+            label={t('password')} type="password" fullWidth variant="outlined" error={!!error}
+            value={password} onChange={e => setPassword(e.currentTarget.value)}
+          />
+
+          <TextField
+            label={t('confirm password')} type="password" fullWidth variant="outlined" error={!!error}
+            value={confirmPassword} onChange={e => setConfirmPassword(e.currentTarget.value)}
+          />
+
+          <Typography variant={'subtitle2'} component={'p'} color={'error'} textAlign={'center'}>
+            {error}
+          </Typography>
+
+          <Button
+            variant="contained"
+            fullWidth
+            size="large"
+            sx={{borderRadius: 2}}
+            onClick={handleRegister}
+          >
+            {t('sign up')}
+          </Button>
+
+          <Typography variant="body2" align="center" color="text.secondary">
+            <Link onClick={() => nav('/login')} sx={{cursor: 'pointer'}}>
+              {t('already have an account')}
+            </Link>
+          </Typography>
+        </CardContent>
+      </Card>
+    </Box>
+  )
+}
+
+export default RegisterScreen;
