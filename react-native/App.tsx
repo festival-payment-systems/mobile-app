@@ -7,6 +7,7 @@ import {
 } from '@webview-bridge/react-native';
 import * as v from 'valibot';
 import {useEffect} from "react";
+import AppConfig from "./config.ts";
 
 NfcManager.start().then(() => console.log('NfcManager started'));
 
@@ -18,6 +19,7 @@ export const appBridge = bridge({
       if (!enabled) {
         // NFC is probably not enabled on the phone!
         console.warn('Nfc is not enabled!')
+        await NfcManager.goToNfcSetting()
         return null
       }
 
@@ -27,6 +29,7 @@ export const appBridge = bridge({
         return null
       }
 
+      await NfcManager.cancelTechnologyRequest()
       console.log('start reading...')
       await NfcManager.requestTechnology(NfcTech.Ndef)
       console.log('getting tag...')
@@ -69,7 +72,7 @@ function App() {
     <View style={styles.container}>
       <WebView
         style={[styles.webview, {width: Window.width}]}
-        source={{uri: 'http://10.114.105.31:5173/'}}
+        source={{uri: AppConfig.webview_url}}
       />
     </View>
   )

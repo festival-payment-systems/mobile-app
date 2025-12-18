@@ -1,6 +1,6 @@
 {
-  "name": "nfc_reading_webview",
-  "version": "0.0.1",
+  "name": "fps-app",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -32,11 +32,9 @@
     "@react-native/typescript-config": "0.82.1",
     "@types/jest": "^29.5.13",
     "@types/react": "^19.1.1",
-    "@types/react-test-renderer": "^19.1.0",
     "eslint": "^8.19.0",
     "jest": "^29.6.3",
     "prettier": "2.8.8",
-    "react-test-renderer": "19.1.1",
     "typescript": "^5.8.3"
   },
   "engines": {
