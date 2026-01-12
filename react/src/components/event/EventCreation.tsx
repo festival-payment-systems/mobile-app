@@ -39,8 +39,7 @@ function EventCreation({open, onClose}: Props) {
     mutationFn: (newEvent: IEventCreation) => api.post('events', newEvent),
     onError: (e) => setError(e.name),
     onSuccess: () => {
-      QueryClient.refetchQueries({queryKey: ['events']})
-      handleClose()
+      QueryClient.refetchQueries({queryKey: ['events']}).then(handleClose)
     },
   })
 

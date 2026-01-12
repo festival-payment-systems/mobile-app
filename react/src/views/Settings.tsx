@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import {useAppState} from "../hooks/AppState.ts";
 import {useAuthState} from "../hooks/AuthState.ts";
-import {Button, Container, Dialog, DialogActions, DialogContent,
-  DialogContentText, DialogTitle, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import {Button, Container, FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 import type { User } from "../types/User.ts";
 import { useTranslation } from "react-i18next";
 import ToggleTextField from "../components/ToggleTextField.tsx";
