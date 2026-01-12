@@ -44,7 +44,7 @@ function Layout() {
 
     // Prevents the id of an event being used -> reduces warnings from i18next because ids are not translated
     if (paths[0] === 'event' && paths.length < 3) {
-      setRouteTitle(t('dashboard'))
+      setRouteTitle('dashboard')
       return
     }
 
