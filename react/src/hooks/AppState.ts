@@ -3,7 +3,6 @@ import type {IEvent} from "../types/Event.ts";
 import type { PaletteMode } from "@mui/material/styles";
 
 interface AppState {
-  selectedEvent: IEvent | null,
   isBridgeReady: boolean,
   language: string,
   changeLanguage: (len: string) => void,
@@ -15,7 +14,6 @@ interface AppState {
 export const useAppState = create<AppState>()(
   (set) => ({
 
-    selectedEvent: null,
     isBridgeReady: false,
     language: 'en',
     theme: 'dark',
