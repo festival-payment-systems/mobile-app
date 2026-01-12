@@ -1,14 +1,15 @@
 import {Navigate, Route, Routes, useNavigate, useParams} from "react-router";
 import Layout from "./components/Layout.tsx";
 import AuthProtected from "./components/wrappers/AuthProtected.tsx";
-import {lazy, useEffect} from "react";
+import {lazy, useEffect, useState} from "react";
 import {setNavigateFn, setSelectedEventName} from "./hooks/Navigation.ts";
 import {useTranslation} from "react-i18next";
 import NfcProtected from "./components/wrappers/NfcProtected.tsx";
 import {useQuery} from "@tanstack/react-query";
 import {api} from "./services/api.service.ts";
 import type {IEvent} from "./types/Event.ts";
-import {CircularProgress} from "@mui/material";
+import {CircularProgress, createTheme, CssBaseline, ThemeProvider} from "@mui/material";
+import {useAppState} from "./hooks/AppState.ts";
 
 
 const EventOverview = lazy(() => import('./views/EventOverview.tsx'))
@@ -35,7 +36,7 @@ function EventNavigation() {
   return (
     <Routes>
       <Route path={'/'}>
-        <Route index element={<EventOverview event={EventQuery.data} />} />
+        <Route index element={<EventOverview event={EventQuery.data}/>}/>
       </Route>
     </Routes>
   )
@@ -48,29 +49,56 @@ const EventsOverview = lazy(() => import('./views/EventsOverview.tsx'))
 
 function App() {
 
+  const App = useAppState()
   const navigate = useNavigate()
-  const { t, i18n } = useTranslation()
+  const { i18n } = useTranslation()
+
+  const [theme, setTheme] = useState(createTheme({
+    palette: {
+      mode: App.theme,
+    }
+  }))
 
   useEffect(() => {
     setNavigateFn(navigate)
   }, [navigate]);
 
   useEffect(() => {
-    i18n.changeLanguage('en')
+    i18n.changeLanguage(App.language).then()
+  }, [App.language]);
+
+  useEffect(() => {
+    setTheme(createTheme({
+      palette: {
+        mode: App.theme,
+      }
+    }))
+  }, [App.theme]);
+
+  useEffect(() => {
+    const loadedTheme = localStorage.getItem('theme')
+    if (loadedTheme && loadedTheme == 'dark' || loadedTheme == 'light') App.changeTheme(loadedTheme)
+
+    const loadedLanguage = localStorage.getItem('language')
+    if (loadedLanguage) App.changeLanguage(loadedLanguage)
   }, []);
 
   return (
-    <Routes>
-      <Route path={'/'} element={<Layout/>}>
-        <Route index element={<Navigate to={'/events'} />} />
-        <Route path={'login'} element={<Login/>} />
-        <Route path={'register'} element={<Register/>} />
-        <Route path={'events'} element={<AuthProtected><EventsOverview/></AuthProtected>} />
-        <Route path={'event/:eventId'} element={<AuthProtected><EventNavigation/></AuthProtected>} />
-        <Route path={'nfc-test'} element={<NfcProtected neededRole={'Customer'}><h2>Successful NFC read!</h2></NfcProtected>} />
-        <Route path={'*'} element={<p>Page not found</p>} />
-      </Route>
-    </Routes>
+    <ThemeProvider theme={theme}>
+      <CssBaseline/>
+      <Routes>
+        <Route path={'/'} element={<Layout/>}>
+          <Route index element={<Navigate to={'/events'}/>}/>
+          <Route path={'login'} element={<Login/>}/>
+          <Route path={'register'} element={<Register/>}/>
+          <Route path={'account'} element={<AuthProtected><EventsOverview/></AuthProtected>}/>
+          <Route path={'events'} element={<AuthProtected><EventsOverview/></AuthProtected>}/>
+          <Route path={'event/:eventId'} element={<AuthProtected><EventNavigation/></AuthProtected>}/>
+          <Route path={'nfc-test'} element={<NfcProtected neededRole={'Customer'}><h2>Successful NFC read!</h2></NfcProtected>}/>
+          <Route path={'*'} element={<p>Page not found</p>}/>
+        </Route>
+      </Routes>
+    </ThemeProvider>
   )
 }
 

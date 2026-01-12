@@ -80,7 +80,7 @@ export const useAuthState = create<AuthState>()(
         refreshUserProfile: async () => {
           const response = await api.get<User>('users/profile')
           set({user: response.data})
-        }
+        },
 
       });
     }, {

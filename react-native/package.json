@@ -10,7 +10,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "@react-native/new-app-screen": "0.82.1",
     "@webview-bridge/react-native": "^1.7.8",
     "react": "19.1.1",
     "react-native": "0.82.1",
