@@ -34,7 +34,16 @@ const de = {
   "back": "Zurück",
   "logout confirm msg": "Möchtest du dich wirklich abmelden?",
   "edit": "Bearbeiten",
-  "hold wristband to device": "Bitte Armband an das Gerät halten"
+  "hold wristband to device": "Bitte Armband an das Gerät halten",
+  "settings": "Einstellungen",
+  "name": "Name",
+  "events": "Events",
+  "unknown": "Unknown",
+  "new password": "Neues Passwort",
+  "language": "Sprache",
+  "dark": "Dunkel",
+  "light": "Hell",
+  "theme": "Darstellung",
 }
 
 export default de

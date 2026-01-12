@@ -35,6 +35,15 @@ const enUs = {
   "logout confirm msg": "Are you sure you want to log out?",
   "edit": "Edit",
   "hold wristband to device": "Please hold the wristband against the device",
+  "settings": "Settings",
+  "name": "Name",
+  "events": "Events",
+  "unknown": "Unknown",
+  "new password": "New Password",
+  "language": "Language",
+  "dark": "Dark",
+  "light": "Light",
+  "theme": "Theme",
 }
 
 export default enUs

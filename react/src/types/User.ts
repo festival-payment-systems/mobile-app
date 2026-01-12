@@ -6,5 +6,4 @@ export interface User {
   firstName: string,
   lastName: string,
   timestamps: Timestamps,
-  language: string,
 }

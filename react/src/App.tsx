@@ -10,6 +10,7 @@ import {api} from "./services/api.service.ts";
 import type {IEvent} from "./types/Event.ts";
 import {CircularProgress, createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import {useAppState} from "./hooks/AppState.ts";
+import {useAuthState} from "./hooks/AuthState.ts";
 
 
 const EventOverview = lazy(() => import('./views/EventOverview.tsx'))
@@ -46,10 +47,12 @@ function EventNavigation() {
 const Login = lazy(() => import('./views/LoginScreen.tsx'))
 const Register = lazy(() => import('./views/RegisterScreen.tsx'))
 const EventsOverview = lazy(() => import('./views/EventsOverview.tsx'))
+const Settings = lazy(() => import('./views/Settings.tsx'))
 
 function App() {
 
   const App = useAppState()
+  const Auth = useAuthState()
   const navigate = useNavigate()
   const { i18n } = useTranslation()
 
@@ -77,10 +80,12 @@ function App() {
 
   useEffect(() => {
     const loadedTheme = localStorage.getItem('theme')
-    if (loadedTheme && loadedTheme == 'dark' || loadedTheme == 'light') App.changeTheme(loadedTheme)
+    if (loadedTheme && (loadedTheme == 'dark' || loadedTheme == 'light')) App.changeTheme(loadedTheme)
 
     const loadedLanguage = localStorage.getItem('language')
-    if (loadedLanguage) App.changeLanguage(loadedLanguage)
+    if (loadedLanguage && (loadedLanguage == 'en' || loadedLanguage == 'de')) App.changeLanguage(loadedLanguage)
+
+    Auth.refreshUserProfile()
   }, []);
 
   return (
@@ -91,7 +96,7 @@ function App() {
           <Route index element={<Navigate to={'/events'}/>}/>
           <Route path={'login'} element={<Login/>}/>
           <Route path={'register'} element={<Register/>}/>
-          <Route path={'account'} element={<AuthProtected><EventsOverview/></AuthProtected>}/>
+          <Route path={'settings'} element={<AuthProtected><Settings/></AuthProtected>}/>
           <Route path={'events'} element={<AuthProtected><EventsOverview/></AuthProtected>}/>
           <Route path={'event/:eventId'} element={<AuthProtected><EventNavigation/></AuthProtected>}/>
           <Route path={'nfc-test'} element={<NfcProtected neededRole={'Customer'}><h2>Successful NFC read!</h2></NfcProtected>}/>

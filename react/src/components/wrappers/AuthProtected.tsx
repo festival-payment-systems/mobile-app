@@ -10,12 +10,13 @@ interface Props {
 
 function AuthProtected({ children, neededRole }: Props) {
 
-  const Auth = useAuthState()
+  const { user } = useAuthState()
+
+  if (!user) {
+    return <Navigate to={'/login'}/>
+  }
 
   // Todo check for role
-  if (neededRole && Auth.user) {
-    return <Navigate to={'/'}/>
-  }
 
   return children
 }

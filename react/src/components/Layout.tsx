@@ -15,14 +15,13 @@ function Layout() {
   const {t} = useTranslation()
   const [routeTitle, setRouteTitle] = useState('???')
   const [showNavbar, setShowNavbar] = useState(false)
-  const [useAcc, setUseAcc] = useState(true)
+  const [useSettings, setUseSettings] = useState(true)
   const [selectedEventName, setSelectedEventName] = useState('')
   const [appBarVisible, setAppBarVisible] = useState(true)
 
   useEffect(() => {
+
     const paths = pathname.split('/').filter(p => p.length > 0)
-    const title = paths.length > 0 ? paths[paths.length - 1] : 'Unknown'
-    setRouteTitle(title.substring(0, 1).toUpperCase() + title.substring(1, title.length).toLowerCase())
 
     let newShowNavbar = true
     for (let path of noNav) {
@@ -33,15 +32,24 @@ function Layout() {
     }
     setShowNavbar(newShowNavbar)
 
-    let newUseAcc = false
+    let newUseSettings = false
     for (let path of pathsUsingAccount) {
       if (paths.includes(path)) {
-        newUseAcc = true
+        newUseSettings = true
         break
       }
     }
-    setUseAcc(newUseAcc)
-    if (newUseAcc) setSelectedEventName('')
+    setUseSettings(newUseSettings)
+    if (newUseSettings) setSelectedEventName('')
+
+    // Prevents the id of an event being used -> reduces warnings from i18next because ids are not translated
+    if (paths[0] === 'event' && paths.length < 3) {
+      setRouteTitle(t('dashboard'))
+      return
+    }
+
+    const title = paths.length > 0 ? paths[paths.length - 1] : 'Unknown'
+    setRouteTitle(title.substring(0, 1).toUpperCase() + title.substring(1, title.length).toLowerCase())
 
   }, [pathname]);
 
@@ -56,8 +64,8 @@ function Layout() {
       {showNavbar && appBarVisible && (
         <AppBar position={'sticky'} sx={{mb: 2, width: '100vw', height: 64}}>
           <Toolbar sx={{justifyContent: 'space-between', p: 2}}>
-            <Button variant={'contained'} color={'inherit'} onClick={() => useAcc ? nav('account') : nav('events')}>
-              {useAcc ? t('account') : t('back')}
+            <Button variant={'contained'} color={'inherit'} onClick={() => useSettings ? nav('settings') : nav(-1)}>
+              {useSettings ? t('settings') : t('back')}
             </Button>
 
             <Tooltip title={t('menu')}>
@@ -65,7 +73,7 @@ function Layout() {
                    onClick={() => console.log('Menu clicked')}>
                 <Box textAlign={'right'}>
                   <Typography component={'h1'} fontSize={'large'}>
-                    {routeTitle}
+                    {t(routeTitle.toLowerCase())}
                   </Typography>
                   <Typography fontSize={'small'} color={'textDisabled'}>
                     {selectedEventName}

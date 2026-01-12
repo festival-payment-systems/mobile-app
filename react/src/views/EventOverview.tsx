@@ -1,12 +1,9 @@
 import {Box, Container, Paper, styled, Typography} from "@mui/material";
-import {Navigate, useParams} from "react-router";
 import {PieChart} from '@mui/x-charts';
 import {useDrawingArea} from "@mui/x-charts";
 import {useEffect} from "react";
-import {setRouteTitle, setSelectedEventName} from "../hooks/Navigation.ts";
+import {setRouteTitle} from "../hooks/Navigation.ts";
 import {useTranslation} from "react-i18next";
-import {useQuery} from "@tanstack/react-query";
-import {api} from "../services/api.service.ts";
 import type {IEvent} from "../types/Event.ts";
 
 
