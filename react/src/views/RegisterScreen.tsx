@@ -1,9 +1,10 @@
 import {useAuthState} from "../hooks/AuthState.ts";
-import {Box, Button, Card, CardContent, Link, TextField, Typography} from "@mui/material";
+import {Box, Button, Card, CardContent, CircularProgress, Link, TextField, Typography} from "@mui/material";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import {useWindowSize} from "../hooks/Window.ts";
 import { useTranslation } from "react-i18next";
+import * as React from "react";
 
 
 function RegisterScreen() {
@@ -19,9 +20,13 @@ function RegisterScreen() {
   const [password, setPassword] = useState<string>('')
   const [confirmPassword, setConfirmPassword] = useState<string>('')
   const [error, setError] = useState<string>('')
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const handleRegister = async () => {
+    if (isLoading) return
+    setIsLoading(true)
     const errorMsg = await Auth.register(email, password, firstName, lastName)
+    setIsLoading(false)
     if (errorMsg) setError(errorMsg)
     else nav('/login')
   }
@@ -34,6 +39,8 @@ function RegisterScreen() {
     <Box
       sx={{
         display: "flex",
+        width: '100vw',
+        height: '100vh',
         alignItems: "center",
         justifyContent: "center",
       }}
@@ -85,7 +92,7 @@ function RegisterScreen() {
 
           <Typography variant="body2" align="center" color="text.secondary">
             <Link onClick={() => nav('/login')} sx={{cursor: 'pointer'}}>
-              {t('already have an account')}
+              {isLoading ? <CircularProgress sx={{color: '#000'}} size={26}/> : t('already have an account')}
             </Link>
           </Typography>
         </CardContent>

@@ -47,27 +47,14 @@ function StatsLabel({ label, value }: { label: string, value: string | number })
 }
 
 
-function EventOverview() {
+function EventOverview({ event }: {event: IEvent}) {
 
-  const {eventId} = useParams()
   const { t } = useTranslation()
   const RADIUS = 128
 
-  const EventQuery = useQuery({
-    queryKey: ['event', eventId],
-    queryFn: async () => (await api.get<IEvent>(`events/${eventId}`)).data,
-    enabled: !!eventId,
-  })
-
   useEffect(() => {
     setRouteTitle(t('dashboard'))
-    if (EventQuery.isSuccess)
-      setSelectedEventName(EventQuery.data.name)
-    else
-      setSelectedEventName('')
-  }, [EventQuery.data, EventQuery.error]);
-
-  if (!eventId) return <Navigate to={'/events'}/>
+  }, []);
 
   return (
     <Container maxWidth={'md'}>

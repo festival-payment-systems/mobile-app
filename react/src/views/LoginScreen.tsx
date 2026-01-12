@@ -1,5 +1,5 @@
 import {useAuthState} from "../hooks/AuthState.ts";
-import {Box, Button, Card, CardContent, Link, TextField, Typography} from "@mui/material";
+import {Box, Button, Card, CardContent, CircularProgress, Link, TextField, Typography} from "@mui/material";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import * as React from "react";
@@ -17,9 +17,13 @@ function LoginScreen() {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [error, setError] = useState<string>('')
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const handleLogin = async () => {
+    if (isLoading) return
+    setIsLoading(true)
     const errorMsg = await Auth.login(email, password)
+    setIsLoading(false)
     if (errorMsg) {
       setError(errorMsg)
       return
@@ -39,6 +43,8 @@ function LoginScreen() {
     <Box
       sx={{
         display: "flex",
+        width: '100vw',
+        height: '100vh',
         alignItems: "center",
         justifyContent: "center",
       }}
@@ -71,7 +77,7 @@ function LoginScreen() {
             sx={{borderRadius: 2}}
             onClick={handleLogin}
           >
-            {t('sign in')}
+            {isLoading ? <CircularProgress sx={{color: '#000'}} size={26}/> : t('sign in')}
           </Button>
 
           <Typography variant="body2" align="center" color="text.secondary">
