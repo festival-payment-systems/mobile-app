@@ -36,9 +36,7 @@ function EventNavigation() {
 
   return (
     <Routes>
-      <Route path={'/'}>
-        <Route index element={<EventOverview event={EventQuery.data}/>}/>
-      </Route>
+      <Route index element={<EventOverview event={EventQuery.data}/>}/>
     </Routes>
   )
 }
@@ -54,7 +52,7 @@ function App() {
   const App = useAppState()
   const Auth = useAuthState()
   const navigate = useNavigate()
-  const { i18n } = useTranslation()
+  const {i18n} = useTranslation()
 
   const [theme, setTheme] = useState(createTheme({
     palette: {
@@ -98,8 +96,9 @@ function App() {
           <Route path={'register'} element={<Register/>}/>
           <Route path={'settings'} element={<AuthProtected><Settings/></AuthProtected>}/>
           <Route path={'events'} element={<AuthProtected><EventsOverview/></AuthProtected>}/>
-          <Route path={'event/:eventId'} element={<AuthProtected><EventNavigation/></AuthProtected>}/>
-          <Route path={'nfc-test'} element={<NfcProtected neededRole={'Customer'}><h2>Successful NFC read!</h2></NfcProtected>}/>
+          <Route path={'event/:eventId/*'} element={<AuthProtected><EventNavigation/></AuthProtected>}/>
+          <Route path={'nfc-test'}
+                 element={<NfcProtected neededRole={'Customer'}><h2>Successful NFC read!</h2></NfcProtected>}/>
           <Route path={'*'} element={<p>Page not found</p>}/>
         </Route>
       </Routes>
