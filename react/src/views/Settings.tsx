@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import {useAppState} from "../hooks/AppState.ts";
 import {useAuthState} from "../hooks/AuthState.ts";
-import {Container, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import {Button, Container, Dialog, DialogActions, DialogContent,
+  DialogContentText, DialogTitle, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import type { User } from "../types/User.ts";
 import { useTranslation } from "react-i18next";
 import ToggleTextField from "../components/ToggleTextField.tsx";
@@ -22,6 +23,7 @@ function Settings() {
 
   const [previewUser, setPreviewUser] = useState<User>(user!)
   const [newPassword, setNewPassword] = useState<string>('')
+  const [passwordDialog, setPasswordDialog] = useState<boolean>(false)
 
   async function onUserDone() {
     await new Promise(r => setTimeout(r, 1000))
@@ -31,6 +33,12 @@ function Settings() {
   async function onNewPasswordDone() {
     await new Promise(r => setTimeout(r, 1000))
     // Todo: send to backend (not implemented)
+    setNewPassword('')
+    setPasswordDialog(false)
+  }
+
+  function onClosePasswordDialog() {
+    setPasswordDialog(false)
     setNewPassword('')
   }
 
@@ -67,7 +75,7 @@ function Settings() {
             onChange={e => setNewPassword(e.currentTarget.value)}
             variant={'outlined'}
             fullWidth
-            onDone={onNewPasswordDone}
+            onDone={async () => setPasswordDialog(true)}
           />
         </Grid>
 
@@ -103,6 +111,30 @@ function Settings() {
         </Grid>
 
       </Grid>
+
+      <Dialog
+        fullScreen={false}
+        open={passwordDialog}
+        onClose={onClosePasswordDialog}
+        aria-labelledby="new-password-dialog-title"
+      >
+        <DialogTitle id="new-password-dialog-title">
+          {t('logout confirm msg')}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {t('this action will logout all of your devices')}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={onClosePasswordDialog}>
+            {t('cancel')}
+          </Button>
+          <Button onClick={onNewPasswordDone} autoFocus>
+            {t('confirm')}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }

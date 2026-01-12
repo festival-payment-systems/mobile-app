@@ -44,6 +44,8 @@ const de = {
   "dark": "Dunkel",
   "light": "Hell",
   "theme": "Darstellung",
+  "this action will logout all of your devices": "Diese Aktion wird dich auf allen Geräten ausloggen.",
+  "confirm": "Confirm",
 }
 
 export default de
