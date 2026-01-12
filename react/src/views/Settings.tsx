@@ -7,6 +7,7 @@ import type { User } from "../types/User.ts";
 import { useTranslation } from "react-i18next";
 import ToggleTextField from "../components/ToggleTextField.tsx";
 import { Navigate } from "react-router";
+import ConfirmDialog from "../components/ConfirmDialog.tsx";
 
 
 const languages = [
@@ -18,12 +19,13 @@ const languages = [
 function Settings() {
 
   const App = useAppState()
-  const { user } = useAuthState()
+  const { user, logout } = useAuthState()
   const { t } = useTranslation()
 
   const [previewUser, setPreviewUser] = useState<User>(user!)
   const [newPassword, setNewPassword] = useState<string>('')
   const [passwordDialog, setPasswordDialog] = useState<boolean>(false)
+  const [logoutDialog, setLogoutDialog] = useState<boolean>(false)
 
   async function onUserDone() {
     await new Promise(r => setTimeout(r, 1000))
@@ -110,31 +112,34 @@ function Settings() {
           </FormControl>
         </Grid>
 
+        <Grid size={{ xs: 12, md: 12 }}>
+          <Button
+            fullWidth
+            variant={'contained'}
+            color={'inherit'}
+            onClick={() => setLogoutDialog(true)}
+          >
+            {t('logout')}
+          </Button>
+        </Grid>
+
       </Grid>
 
-      <Dialog
-        fullScreen={false}
+      <ConfirmDialog
         open={passwordDialog}
         onClose={onClosePasswordDialog}
-        aria-labelledby="new-password-dialog-title"
-      >
-        <DialogTitle id="new-password-dialog-title">
-          {t('logout confirm msg')}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {t('this action will logout all of your devices')}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={onClosePasswordDialog}>
-            {t('cancel')}
-          </Button>
-          <Button onClick={onNewPasswordDone} autoFocus>
-            {t('confirm')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onConfirm={onNewPasswordDone}
+        title={t('logout confirm msg')}
+        description={t('this action will logout all of your devices')}
+      />
+
+      <ConfirmDialog
+        open={logoutDialog}
+        onClose={() => setLogoutDialog(false)}
+        onConfirm={logout}
+        title={t('logout confirm msg')}
+      />
+
     </Container>
   );
 }

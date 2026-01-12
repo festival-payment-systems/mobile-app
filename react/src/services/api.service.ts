@@ -1,8 +1,18 @@
 import axios, {AxiosError} from "axios";
 import {config} from "../config.ts";
-import {useNavigate} from "react-router";
 import {useAuthState} from "../hooks/AuthState.ts";
 import {navigateTo} from "../hooks/Navigation.ts";
+
+
+const MIN_DURATION_MS: number = 1000
+
+declare module "axios" {
+  export interface AxiosRequestConfig {
+    metadata?: {
+      startTime: number,
+    }
+  }
+}
 
 export const api = axios.create({
   baseURL: `${config.BASE_URL}/api/`,
@@ -14,7 +24,18 @@ export const api = axios.create({
 
 
 api.interceptors.response.use(
-  (response) => response,
+  async (response) => {
+    if (!config.useArtificialLoading || !response.config.metadata) return response
+
+    const elapsed = Date.now() - response.config.metadata.startTime
+    const remaining = MIN_DURATION_MS - elapsed
+
+    if (remaining > 0) {
+      await new Promise(r => setTimeout(r, remaining))
+    }
+
+    return response
+  },
 
   async (error: AxiosError) => {
 
@@ -62,4 +83,14 @@ api.interceptors.response.use(
     return Promise.reject(error)
   }
 
+)
+
+
+api.interceptors.request.use(
+  (request) => {
+    request.metadata = {
+      startTime: Date.now(),
+    }
+    return request
+  }
 )

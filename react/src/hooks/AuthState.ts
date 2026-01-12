@@ -5,6 +5,7 @@ import type {Tokens} from "../types/Tokens.ts";
 import type {ErrorResponse, ValidationErrorResponse} from "../types/AuthResponses.ts";
 import {createJSONStorage, persist} from "zustand/middleware";
 import axios, {type AxiosError} from "axios";
+import {navigateTo} from "./Navigation.ts";
 
 interface AuthState {
   user: User | null,
@@ -12,6 +13,7 @@ interface AuthState {
   login: (email: string, password: string) => Promise<string | null>,
   refresh: () => Promise<boolean>,
   refreshUserProfile: () => Promise<void>,
+  logout: () => Promise<void>,
 }
 
 export const useAuthState = create<AuthState>()(
@@ -80,6 +82,11 @@ export const useAuthState = create<AuthState>()(
         refreshUserProfile: async () => {
           const response = await api.get<User>('users/profile')
           set({user: response.data})
+        },
+
+        logout: async () => {
+          // Todo: add logout api
+          navigateTo('/login')
         },
 
       });
