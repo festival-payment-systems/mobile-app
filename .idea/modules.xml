@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/fps-mobile.iml" filepath="$PROJECT_DIR$/fps-mobile.iml" />
+      <module fileurl="file://$PROJECT_DIR$/react/react.iml" filepath="$PROJECT_DIR$/react/react.iml" />
+      <module fileurl="file://$PROJECT_DIR$/react-native/react-native.iml" filepath="$PROJECT_DIR$/react-native/react-native.iml" />
     </modules>
   </component>
 </project>
