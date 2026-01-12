@@ -86,7 +86,7 @@ function Settings() {
           </FormControl>
         </Grid>
 
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 12 }}>
           <FormControl fullWidth>
             <InputLabel id={"theme-select-label"}>{t('theme')}</InputLabel>
             <Select
