@@ -85,9 +85,11 @@ export const useAuthState = create<AuthState>()(
         },
 
         logout: async () => {
-          // Todo: add logout api
+          await api.post('auth/logout')
           navigateTo('/login')
+          set({user: null})
         },
+
 
       });
     }, {

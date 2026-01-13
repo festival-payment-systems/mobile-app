@@ -23,16 +23,19 @@ function LoginScreen() {
     if (isLoading) return
     setIsLoading(true)
     const errorMsg = await Auth.login(email, password)
-    setIsLoading(false)
     if (errorMsg) {
       setError(errorMsg)
+      setIsLoading(false)
       return
     }
+
+    await Auth.refreshUserProfile()
+    setIsLoading(false)
     nav('/')
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === 'Enter') handleLogin()
+    if (event.key === 'Enter') handleLogin().then()
   }
 
   useEffect(() => {
