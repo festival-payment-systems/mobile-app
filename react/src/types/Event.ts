@@ -18,3 +18,11 @@ export interface IEventCreation {
   /** yyyy-MM-dd */
   endingAt: string,
 }
+
+
+export interface IEventMember {
+  "id": string,
+  "userId": string,
+  "eventId": string,
+  "timestamps": Timestamps,
+}

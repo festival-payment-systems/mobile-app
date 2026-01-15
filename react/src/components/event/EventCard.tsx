@@ -37,7 +37,7 @@ function EventCard({ event, index }: Props) {
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      onClick={() => nav(`/event/${event.id}`)}
+      onClick={() => nav(`/event/${event.id}/dashboard`)}
     >
       <Chip
         label={t(label)}

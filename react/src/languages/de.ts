@@ -46,6 +46,7 @@ const de = {
   "theme": "Darstellung",
   "this action will logout all of your devices": "Diese Aktion wird dich auf allen Geräten ausloggen.",
   "confirm": "Confirm",
+  "members": "Mitglieder",
 }
 
 export default de

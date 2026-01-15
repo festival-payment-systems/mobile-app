@@ -8,6 +8,7 @@ import {useAppState} from "../hooks/AppState.ts";
 import {config} from "../config.ts";
 
 const noNav: string[] = ['login', 'register']
+/** All paths that use the account (now settings) button left in the AppBar **/
 const pathsUsingAccount: string[] = ['events']
 
 function Layout() {
@@ -79,10 +80,10 @@ function Layout() {
               {useSettings ? t('settings') : t('back')}
             </Button>
 
-            <Tooltip title={t('menu')}>
-              {App.selectedEvent ? (
+            {App.selectedEvent ? (
+              <Tooltip title={t('menu')}>
                 <Box display={'flex'} alignItems={'center'} gap={1} sx={{cursor: 'pointer'}}
-                     onClick={() => console.log('Menu clicked')}>
+                     onClick={() => nav(`/event/${App.selectedEvent!.id}/menu`)}>
                   <Box textAlign={'right'}>
                     <Typography component={'h1'} fontSize={'large'}>
                       {t(routeTitle.toLowerCase())}
@@ -93,10 +94,10 @@ function Layout() {
                   </Box>
                   <MenuIcon fontSize={'large'}/>
                 </Box>
-              ) : (
-                <Typography variant={'h6'} component={'h1'}>{config.projectName}</Typography>
-              )}
-            </Tooltip>
+              </Tooltip>
+            ) : (
+              <Typography variant={'h6'} component={'h1'}>{config.projectName}</Typography>
+            )}
           </Toolbar>
         </AppBar>
       )}

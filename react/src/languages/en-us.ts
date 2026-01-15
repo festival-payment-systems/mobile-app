@@ -46,6 +46,7 @@ const enUs = {
   "theme": "Theme",
   "this action will logout all of your devices": "This action will log out of all your devices.",
   "confirm": "Bestätigen",
+  "members": "Members",
 }
 
 export default enUs

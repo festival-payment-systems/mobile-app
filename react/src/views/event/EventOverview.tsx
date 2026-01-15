@@ -2,9 +2,9 @@ import {Box, Container, Paper, styled, Typography} from "@mui/material";
 import {PieChart} from '@mui/x-charts';
 import {useDrawingArea} from "@mui/x-charts";
 import {useEffect} from "react";
-import {setRouteTitle} from "../hooks/Navigation.ts";
+import {setRouteTitle} from "../../hooks/Navigation.ts";
 import {useTranslation} from "react-i18next";
-import type {IEvent} from "../types/Event.ts";
+import type {IEvent} from "../../types/Event.ts";
 
 
 const CenterText = styled("text")<{ useSecondary?: boolean }>(({ theme, useSecondary }) => ({
