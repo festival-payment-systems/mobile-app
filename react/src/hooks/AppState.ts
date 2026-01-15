@@ -4,6 +4,8 @@ import type { PaletteMode } from "@mui/material/styles";
 
 interface AppState {
   isBridgeReady: boolean,
+  selectedEvent: IEvent | null,
+  setSelectedEvent: (event: IEvent | null) => void,
   language: string,
   changeLanguage: (len: string) => void,
   theme: PaletteMode,
@@ -15,8 +17,13 @@ export const useAppState = create<AppState>()(
   (set) => ({
 
     isBridgeReady: false,
+    selectedEvent: null,
     language: 'en',
     theme: 'dark',
+
+    setSelectedEvent: (event) => {
+      set({selectedEvent: event})
+    },
 
     changeLanguage: (len: string) => {
       localStorage.setItem('language', len)

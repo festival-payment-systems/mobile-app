@@ -1,8 +1,8 @@
-import {Navigate, Route, Routes, useNavigate, useParams} from "react-router";
+import {Navigate, Route, Routes, useLocation, useNavigate, useParams} from "react-router";
 import Layout from "./components/Layout.tsx";
 import AuthProtected from "./components/wrappers/AuthProtected.tsx";
 import {lazy, useEffect, useState} from "react";
-import {setNavigateFn, setSelectedEventName} from "./hooks/Navigation.ts";
+import {setNavigateFn} from "./hooks/Navigation.ts";
 import {useTranslation} from "react-i18next";
 import NfcProtected from "./components/wrappers/NfcProtected.tsx";
 import {useQuery} from "@tanstack/react-query";
@@ -18,6 +18,7 @@ const EventOverview = lazy(() => import('./views/EventOverview.tsx'))
 function EventNavigation() {
 
   const {eventId} = useParams()
+  const App = useAppState()
 
   const EventQuery = useQuery({
     queryKey: ['event', eventId],
@@ -26,8 +27,8 @@ function EventNavigation() {
   })
 
   useEffect(() => {
-    if (EventQuery.isSuccess) setSelectedEventName(EventQuery.data.name)
-    else setSelectedEventName('')
+    if (EventQuery.isSuccess) App.setSelectedEvent(EventQuery.data)
+    else App.setSelectedEvent(null)
   }, [EventQuery.data]);
 
   if (!eventId || EventQuery.isError) return <Navigate to={'/events'}/>
@@ -52,6 +53,7 @@ function App() {
   const App = useAppState()
   const Auth = useAuthState()
   const navigate = useNavigate()
+  const loc = useLocation()
   const {i18n} = useTranslation()
 
   const [theme, setTheme] = useState(createTheme({

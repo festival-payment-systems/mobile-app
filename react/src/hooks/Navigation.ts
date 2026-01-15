@@ -29,20 +29,6 @@ export function setRouteTitle(title: string) {
 
 
 /**
- * From Layout.tsx to set the currently selected Event Name
- */
-let selectedEventNameFn: ((name: string) => void) | null = null
-
-export function setSelectedEventNameFn(fn: (name: string) => void) {
-  selectedEventNameFn = fn
-}
-
-export function setSelectedEventName(name: string) {
-  if (selectedEventNameFn) selectedEventNameFn(name)
-}
-
-
-/**
  * From Layout.tsx to hide or show the Appbar
  */
 let appBarVisibleFn: ((visible: boolean) => void) | null = null
