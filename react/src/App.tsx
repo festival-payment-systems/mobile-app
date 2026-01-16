@@ -35,7 +35,7 @@ function EventNavigation() {
 
   if (!eventId || EventQuery.isError) return <Navigate to={'/events'}/>
 
-  if (EventQuery.isLoading || !EventQuery.isSuccess) return <CircularProgress/>
+  if (EventQuery.isLoading || !EventQuery.isSuccess || !App.selectedEvent) return <CircularProgress/>
 
   return (
     <Routes>
@@ -58,6 +58,7 @@ function App() {
   const Auth = useAuthState()
   const navigate = useNavigate()
   const {i18n} = useTranslation()
+  const Loc = useLocation()
 
   const [theme, setTheme] = useState(createTheme({
     palette: {
@@ -80,6 +81,13 @@ function App() {
       }
     }))
   }, [App.theme]);
+
+  useEffect(() => {
+    if (App.selectedEvent && !Loc.pathname.includes(App.selectedEvent.id)) {
+      console.debug("Selected Event is not matching to path anymore. -> Set to null")
+      App.setSelectedEvent(null)
+    }
+  }, [Loc.pathname]);
 
   useEffect(() => {
     const loadedTheme = localStorage.getItem('theme')

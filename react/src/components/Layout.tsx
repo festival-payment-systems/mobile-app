@@ -30,7 +30,6 @@ function Layout() {
     }
 
     nav(-1)
-    App.setSelectedEvent(null)
   }
 
   useEffect(() => {
