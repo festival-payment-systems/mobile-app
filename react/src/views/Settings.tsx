@@ -2,7 +2,7 @@ import React, {type ChangeEvent, useState} from 'react';
 import {useAppState} from "../hooks/AppState.ts";
 import {useAuthState} from "../hooks/AuthState.ts";
 import {Button, Container, FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
-import type {MinimalUser} from "../types/User.ts";
+import type {MinimalUser, UpdateUser} from "../types/User.ts";
 import { useTranslation } from "react-i18next";
 import ToggleTextField from "../components/ToggleTextField.tsx";
 import { Navigate } from "react-router";
@@ -23,16 +23,12 @@ function Settings() {
   const { user, logout, updateUserProfile } = useAuthState()
   const { t } = useTranslation()
 
-  const [previewUser, setPreviewUser] = useState<MinimalUser>(user!)
   const [newPassword, setNewPassword] = useState<string>('')
   const [passwordDialog, setPasswordDialog] = useState<boolean>(false)
   const [logoutDialog, setLogoutDialog] = useState<boolean>(false)
 
-  async function onUserDone() {
-    const error = await updateUserProfile(previewUser)
-    if (error) {
-      console.error('Error while updating user: ', error)
-    }
+  async function onUserDone(field: keyof UpdateUser, value: string) {
+    await updateUserProfile({[field]: value})
   }
 
   async function onNewPasswordDone() {
@@ -47,14 +43,6 @@ function Settings() {
     setNewPassword('')
   }
 
-  function updateField(field: keyof MinimalUser, event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
-    setPreviewUser(p => ({...p, [field]: event.target.value}))
-  }
-
-  function cancelEdit() {
-    setPreviewUser(user!)
-  }
-
   // Won't happen anyway because of using AuthProtected
   if (!user) return <Navigate to={"login"} />
 
@@ -64,36 +52,30 @@ function Settings() {
         <Grid size={{ xs: 12, md: 6 }}>
           <ToggleTextField
             label={t('first name')}
-            value={previewUser.firstName}
-            onChange={e => updateField('firstName', e)}
-            onCancel={cancelEdit}
             variant={'outlined'}
             fullWidth
-            onDone={onUserDone}
+            onDone={val => onUserDone('firstName', val)}
+            placeholder={user!.firstName}
           />
         </Grid>
 
         <Grid size={{ xs: 12, md: 6 }}>
           <ToggleTextField
             label={t('last name')}
-            value={previewUser.lastName}
-            onChange={e => updateField('lastName', e)}
-            onCancel={cancelEdit}
             variant={'outlined'}
             fullWidth
-            onDone={onUserDone}
+            onDone={val => onUserDone('lastName', val)}
+            placeholder={user!.lastName}
           />
         </Grid>
 
         <Grid size={{ xs: 12, md: 6 }}>
           <ToggleTextField
             label={t('email')}
-            value={previewUser.email}
-            onChange={e => updateField('email', e)}
-            onCancel={cancelEdit}
             variant={'outlined'}
             fullWidth
-            onDone={onUserDone}
+            onDone={val => onUserDone('email', val)}
+            placeholder={user!.email}
           />
         </Grid>
 

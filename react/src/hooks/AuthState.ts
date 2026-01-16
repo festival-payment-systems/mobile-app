@@ -1,4 +1,4 @@
-import type {MinimalUser, User} from "../types/User.ts";
+import type {UpdateUser, User} from "../types/User.ts";
 import {create} from "zustand/react";
 import {api} from "../services/api.service.ts";
 import type {ErrorResponse, ValidationErrorResponse} from "../types/AuthResponses.ts";
@@ -30,7 +30,7 @@ interface AuthState {
   login: (email: string, password: string) => Promise<string | null>,
   refresh: () => Promise<boolean>,
   refreshUserProfile: () => Promise<void>,
-  updateUserProfile: (updatedUser: MinimalUser) => Promise<string>,
+  updateUserProfile: (updatedUser: UpdateUser) => Promise<string>,
   logout: () => Promise<void>,
 }
 

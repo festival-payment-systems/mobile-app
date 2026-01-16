@@ -13,3 +13,10 @@ export interface User extends MinimalUser {
   id: string,
   timestamps: Timestamps,
 }
+
+
+export interface UpdateUser {
+  email?: string,
+  firstName?: string,
+  lastName?: string,
+}
