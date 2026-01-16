@@ -38,7 +38,7 @@ function EventMembers({ event }: Props) {
 
       {MembersQuery.isSuccess && (
         <Box display={'flex'} flexDirection={'column'} gap={2} mt={2}>
-          {MembersQuery.data.map(m => <EventMemberCard member={m}/>)}
+          {MembersQuery.data.map(m => <EventMemberCard key={m.userId} member={m}/>)}
         </Box>
       )}
     </Container>

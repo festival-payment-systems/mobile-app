@@ -47,6 +47,8 @@ const enUs = {
   "this action will logout all of your devices": "This action will log out of all your devices.",
   "confirm": "Bestätigen",
   "members": "Members",
+  "transactions": "Transactions",
+  "shops": "Shops",
 }
 
 export default enUs

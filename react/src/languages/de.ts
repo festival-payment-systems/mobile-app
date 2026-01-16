@@ -47,6 +47,8 @@ const de = {
   "this action will logout all of your devices": "Diese Aktion wird dich auf allen Geräten ausloggen.",
   "confirm": "Confirm",
   "members": "Mitglieder",
+  "transactions": "Transaktionen",
+  "shops": "Geschäfte",
 }
 
 export default de

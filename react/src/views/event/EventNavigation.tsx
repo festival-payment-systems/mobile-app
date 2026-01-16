@@ -50,7 +50,7 @@ function EventNavigation() {
   return (
     <Container maxWidth={'md'} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: Window.height - 128 }}>
       <Box display={'flex'} flexDirection={'column'} gap={2}>
-        {organizerNavs.map(n => <NavButton title={n.title} path={n.path}/>)}
+        {organizerNavs.map(n => <NavButton key={n.title} title={n.title} path={n.path}/>)}
       </Box>
 
       <Box display={'flex'} flexDirection={'column'} gap={2}>
