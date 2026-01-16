@@ -1,10 +1,9 @@
 import type {User} from "../types/User.ts";
 import {create} from "zustand/react";
 import {api} from "../services/api.service.ts";
-import type {Tokens} from "../types/Tokens.ts";
 import type {ErrorResponse, ValidationErrorResponse} from "../types/AuthResponses.ts";
 import {createJSONStorage, persist} from "zustand/middleware";
-import axios, {type AxiosError} from "axios";
+import {type AxiosError} from "axios";
 import {navigateTo} from "./Navigation.ts";
 
 interface AuthState {
@@ -58,7 +57,7 @@ export const useAuthState = create<AuthState>()(
           try {
             const response = await api.post('auth/login', {email, password})
             return response.status === 200 ? null : 'Unknown response'
-          } catch(error) {
+          } catch (error) {
             const axError = error as AxiosError
             return axError.response ? (axError.response.data as ErrorResponse).message : JSON.stringify(axError)
           }
@@ -73,15 +72,20 @@ export const useAuthState = create<AuthState>()(
             }
             return response.status === 200
 
-          } catch(error) {
-            console.log(`ERROR while refresh: ${error}`)
+          } catch (error) {
+
             return false
+
           }
         },
 
         refreshUserProfile: async () => {
-          const response = await api.get<User>('users/profile')
-          set({user: response.data})
+          try {
+
+            const response = await api.get<User>('users/profile')
+            set({user: response.data})
+
+          } catch (e) {return} // Prevents the 'Unhandled error' error in console.
         },
 
         logout: async () => {

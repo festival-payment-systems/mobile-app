@@ -57,8 +57,10 @@ api.interceptors.response.use(
     switch (error.response.status) {
       case 400:
         if (reqUrl && reqUrl.includes('refresh')) {
-          console.log('Auth could not be refreshed (400 error) ', error)
-          navigateTo('/login')
+          console.debug('Auth could not be refreshed.')
+          if (!location.pathname.includes('login') || !location.pathname.includes('register')) {
+            navigateTo('/login')
+          }
           return Promise.reject(error)
         }
         console.log(`400 ERROR: `, error)
