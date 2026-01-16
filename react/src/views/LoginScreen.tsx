@@ -53,7 +53,7 @@ function LoginScreen() {
       }}
     >
       <Card elevation={6} sx={{borderRadius: width <= 512 ? 0 : 4, maxWidth: 512, width: '100vw'}}>
-        <CardContent sx={{display: "flex", flexDirection: "column", gap: 3}}>
+        <CardContent sx={{display: "flex", flexDirection: "column", gap: 3}} component={'form'}>
           <Typography variant="h5" align="center" fontWeight={600}>
             {t('login')}
           </Typography>
@@ -61,11 +61,12 @@ function LoginScreen() {
           <TextField
             label={t('email')} type="email" fullWidth variant="outlined" error={error.length > 0} onKeyDown={handleKeyDown}
             value={email} onChange={e => setEmail(e.currentTarget.value)}
+            autoComplete={'email'}
           />
 
           <TextField
             label={t('password')} type="password" fullWidth variant="outlined" error={error.length > 0}
-            onKeyDown={handleKeyDown}
+            onKeyDown={handleKeyDown} autoComplete={'current-password'}
             value={password} onChange={e => setPassword(e.currentTarget.value)}
           />
 
