@@ -2,12 +2,12 @@ import React, {type ChangeEvent, useState} from 'react';
 import {useAppState} from "../hooks/AppState.ts";
 import {useAuthState} from "../hooks/AuthState.ts";
 import {Button, Container, FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
-import type {MinimalUser, User} from "../types/User.ts";
+import type {MinimalUser} from "../types/User.ts";
 import { useTranslation } from "react-i18next";
 import ToggleTextField from "../components/ToggleTextField.tsx";
 import { Navigate } from "react-router";
 import ConfirmDialog from "../components/ConfirmDialog.tsx";
-import {api} from "../services/api.service.ts";
+import {useWindowSize} from "../hooks/Window.ts";
 
 
 const languages = [
@@ -19,6 +19,7 @@ const languages = [
 function Settings() {
 
   const App = useAppState()
+  const Window = useWindowSize()
   const { user, logout, updateUserProfile } = useAuthState()
   const { t } = useTranslation()
 
@@ -58,7 +59,7 @@ function Settings() {
   if (!user) return <Navigate to={"login"} />
 
   return (
-    <Container maxWidth={'md'} sx={{display: 'flex', flexDirection: 'column', gap: 2, p: 2 }}>
+    <Container maxWidth={'md'} sx={{display: 'flex', flexDirection: 'column', gap: 2, p: 2, justifyContent: 'space-between', height: Window.height - 96 }}>
       <Grid container spacing={{ xs: 4, md: 2 }}>
         <Grid size={{ xs: 12, md: 6 }}>
           <ToggleTextField
@@ -138,18 +139,16 @@ function Settings() {
           </FormControl>
         </Grid>
 
-        <Grid size={{ xs: 12, md: 12 }}>
-          <Button
-            fullWidth
-            variant={'contained'}
-            color={'error'}
-            onClick={() => setLogoutDialog(true)}
-          >
-            {t('logout')}
-          </Button>
-        </Grid>
-
       </Grid>
+
+      <Button
+        fullWidth
+        variant={'contained'}
+        color={'error'}
+        onClick={() => setLogoutDialog(true)}
+      >
+        {t('logout')}
+      </Button>
 
       <ConfirmDialog
         open={passwordDialog}
