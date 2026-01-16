@@ -16,6 +16,7 @@ import {useAuthState} from "./hooks/AuthState.ts";
 const EventOverview = lazy(() => import('./views/event/EventOverview.tsx'))
 const EventMembers = lazy(() => import('./views/event/EventMembers.tsx'))
 const EventNavScreen = lazy(() => import('./views/event/EventNavigation.tsx'))
+const EventMemberInvite = lazy(() => import('./views/event/EventMemberInvite.tsx'))
 
 function EventNavigation() {
 
@@ -42,6 +43,7 @@ function EventNavigation() {
       <Route index path={'/*'} element={<EventNavScreen />} />
       <Route path={"/dashboard"} element={<EventOverview event={EventQuery.data}/>} />
       <Route path={"/members"} element={<EventMembers event={EventQuery.data}/>}/>
+      <Route path={"/members/invite"} element={<EventMemberInvite event={EventQuery.data}/>}/>
     </Routes>
   )
 }

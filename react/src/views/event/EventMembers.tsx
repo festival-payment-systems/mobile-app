@@ -1,16 +1,24 @@
 import type {IEvent, IEventMember} from "../../types/Event.ts";
-import {Box, CircularProgress, Container, TextField, Typography} from "@mui/material";
+import {Box, CircularProgress, Container, TextField, Tooltip, Typography, useMediaQuery, useTheme} from "@mui/material";
 import {useState} from "react";
 import {useQuery} from "@tanstack/react-query";
 import {api} from "../../services/api.service.ts";
-import EventCard from "../../components/event/EventCard.tsx";
 import EventMemberCard from "./EventMemberCard.tsx";
+import {MotionFab} from "../../components/Motion.tsx";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import {useTranslation} from "react-i18next";
+import {useNavigate} from "react-router";
 
 interface Props {
   event: IEvent,
 }
 
 function EventMembers({ event }: Props) {
+
+  const { t } = useTranslation()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const nav = useNavigate()
 
   const MembersQuery = useQuery({
     queryKey: ['members', event.id],
@@ -41,6 +49,26 @@ function EventMembers({ event }: Props) {
           {MembersQuery.data.map(m => <EventMemberCard key={m.userId} member={m}/>)}
         </Box>
       )}
+
+      <Tooltip title={t('invite member')} arrow placement={'auto'}>
+        <MotionFab
+          color="primary"
+          aria-label={t('invite member')}
+          sx={{
+            position: 'fixed',
+            bottom: isMobile ? 20 : 40,
+            right: isMobile ? 20 : 40,
+            width: isMobile ? 56 : 70,
+            height: isMobile ? 56 : 70,
+          }}
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.5 }}
+          onClick={() => nav('invite')}
+        >
+          <PersonAddIcon fontSize={isMobile ? 'medium' : 'large'} />
+        </MotionFab>
+      </Tooltip>
     </Container>
   );
 }

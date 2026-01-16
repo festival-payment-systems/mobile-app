@@ -49,6 +49,14 @@ const de = {
   "members": "Mitglieder",
   "transactions": "Transaktionen",
   "shops": "Geschäfte",
+  "invite member": "Mitglied einladen",
+  "invite": "Einladen",
+  "add email": "Email hinzufügen",
+  "remove": "Entfernen",
+  "send invites": "Sende Einladungen",
+  "not valid email": "Keine gültige Email!",
+  "invalid invites": "Einladungen waren ungültig!",
+  "emails not found": "Emails nicht gefunden!",
 }
 
 export default de

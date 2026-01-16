@@ -49,6 +49,14 @@ const enUs = {
   "members": "Members",
   "transactions": "Transactions",
   "shops": "Shops",
+  "invite member": "Invite Member",
+  "invite": "Invite",
+  "add email": "Add an email",
+  "remove": "Remove",
+  "send invites": "Send Invites",
+  "not valid email": "Not an valid email!",
+  "invalid invites": "invalid invites!",
+  "emails not found": "emails not found!",
 }
 
 export default enUs
