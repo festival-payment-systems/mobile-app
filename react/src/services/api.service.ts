@@ -1,4 +1,4 @@
-import axios, {AxiosError} from "axios";
+import axios, {AxiosError, type AxiosRequestConfig, type CreateAxiosDefaults} from "axios";
 import {config} from "../config.ts";
 import {useAuthState} from "../hooks/AuthState.ts";
 import {navigateTo} from "../hooks/Navigation.ts";
@@ -28,6 +28,7 @@ api.interceptors.response.use(
     if (!config.useArtificialLoading || !response.config.metadata) return response
 
     const elapsed = Date.now() - response.config.metadata.startTime
+    console.debug(`Request to '${response.config.url}' took ${elapsed} ms.`)
     const remaining = MIN_DURATION_MS - elapsed
 
     if (remaining > 0) {
