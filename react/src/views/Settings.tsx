@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, {type ChangeEvent, useState} from 'react';
 import {useAppState} from "../hooks/AppState.ts";
 import {useAuthState} from "../hooks/AuthState.ts";
 import {Button, Container, FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
-import type { User } from "../types/User.ts";
+import type {MinimalUser, User} from "../types/User.ts";
 import { useTranslation } from "react-i18next";
 import ToggleTextField from "../components/ToggleTextField.tsx";
 import { Navigate } from "react-router";
 import ConfirmDialog from "../components/ConfirmDialog.tsx";
+import {api} from "../services/api.service.ts";
 
 
 const languages = [
@@ -18,17 +19,19 @@ const languages = [
 function Settings() {
 
   const App = useAppState()
-  const { user, logout } = useAuthState()
+  const { user, logout, updateUserProfile } = useAuthState()
   const { t } = useTranslation()
 
-  const [previewUser, setPreviewUser] = useState<User>(user!)
+  const [previewUser, setPreviewUser] = useState<MinimalUser>(user!)
   const [newPassword, setNewPassword] = useState<string>('')
   const [passwordDialog, setPasswordDialog] = useState<boolean>(false)
   const [logoutDialog, setLogoutDialog] = useState<boolean>(false)
 
   async function onUserDone() {
-    await new Promise(r => setTimeout(r, 1000))
-    // Todo: send to backend (not implemented) and refresh user
+    const error = await updateUserProfile(previewUser)
+    if (error) {
+      console.error('Error while updating user: ', error)
+    }
   }
 
   async function onNewPasswordDone() {
@@ -43,6 +46,14 @@ function Settings() {
     setNewPassword('')
   }
 
+  function updateField(field: keyof MinimalUser, event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
+    setPreviewUser(p => ({...p, [field]: event.target.value}))
+  }
+
+  function cancelEdit() {
+    setPreviewUser(user!)
+  }
+
   // Won't happen anyway because of using AuthProtected
   if (!user) return <Navigate to={"login"} />
 
@@ -51,8 +62,22 @@ function Settings() {
       <Grid container spacing={{ xs: 4, md: 2 }}>
         <Grid size={{ xs: 12, md: 6 }}>
           <ToggleTextField
-            label={t('name')}
-            value={`${user.firstName} ${user.lastName}`}
+            label={t('first name')}
+            value={previewUser.firstName}
+            onChange={e => updateField('firstName', e)}
+            onCancel={cancelEdit}
+            variant={'outlined'}
+            fullWidth
+            onDone={onUserDone}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 6 }}>
+          <ToggleTextField
+            label={t('last name')}
+            value={previewUser.lastName}
+            onChange={e => updateField('lastName', e)}
+            onCancel={cancelEdit}
             variant={'outlined'}
             fullWidth
             onDone={onUserDone}
@@ -62,7 +87,9 @@ function Settings() {
         <Grid size={{ xs: 12, md: 6 }}>
           <ToggleTextField
             label={t('email')}
-            value={user.email}
+            value={previewUser.email}
+            onChange={e => updateField('email', e)}
+            onCancel={cancelEdit}
             variant={'outlined'}
             fullWidth
             onDone={onUserDone}
@@ -95,7 +122,7 @@ function Settings() {
           </FormControl>
         </Grid>
 
-        <Grid size={{ xs: 12, md: 12 }}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <FormControl fullWidth>
             <InputLabel id={"theme-select-label"}>{t('theme')}</InputLabel>
             <Select
@@ -115,7 +142,7 @@ function Settings() {
           <Button
             fullWidth
             variant={'contained'}
-            color={'inherit'}
+            color={'error'}
             onClick={() => setLogoutDialog(true)}
           >
             {t('logout')}

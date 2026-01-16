@@ -45,7 +45,7 @@ const de = {
   "light": "Hell",
   "theme": "Darstellung",
   "this action will logout all of your devices": "Diese Aktion wird dich auf allen Geräten ausloggen.",
-  "confirm": "Confirm",
+  "confirm": "Bestätigen",
   "members": "Mitglieder",
   "transactions": "Transaktionen",
   "shops": "Geschäfte",

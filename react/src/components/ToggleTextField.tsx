@@ -2,18 +2,20 @@ import React, { useState } from 'react';
 import {CircularProgress, IconButton, InputAdornment, TextField, type TextFieldProps} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DoneIcon from '@mui/icons-material/Done';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 
 type Props = TextFieldProps & {
   onDone: () => Promise<void>,
+  onCancel?: () => void,
 }
 
-function ToggleTextField({ onDone, ...rest }: Props) {
+function ToggleTextField({ onDone, onCancel, ...rest }: Props) {
 
   const [editing, setEditing] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  function onClick() {
+  function onDoneClick() {
     if (!editing) {
       setEditing(true)
       return
@@ -26,6 +28,11 @@ function ToggleTextField({ onDone, ...rest }: Props) {
     })
   }
 
+  function onCancelClick() {
+    setEditing(false)
+    onCancel?.()
+  }
+
   return (
     <TextField
       {...rest}
@@ -34,9 +41,15 @@ function ToggleTextField({ onDone, ...rest }: Props) {
         input: {
           endAdornment: (
             <InputAdornment position={"end"}>
-              <IconButton onClick={onClick} disabled={isLoading}>
+              <IconButton onClick={onDoneClick} disabled={isLoading}>
                 {isLoading ? <CircularProgress size={28} /> : (editing ? <DoneIcon/> : <EditIcon/>)}
               </IconButton>
+
+              {editing && onCancel && (
+                <IconButton onClick={onCancelClick} disabled={isLoading}>
+                  <CancelIcon/>
+                </IconButton>
+              )}
             </InputAdornment>
           )
         }
