@@ -58,7 +58,7 @@ api.interceptors.response.use(
       case 400:
         if (reqUrl && reqUrl.includes('refresh')) {
           console.debug('Auth could not be refreshed.')
-          if (!location.pathname.includes('login') || !location.pathname.includes('register')) {
+          if (!location.pathname.includes('login') && !location.pathname.includes('register')) {
             navigateTo('/login')
           }
           return Promise.reject(error)
@@ -75,7 +75,9 @@ api.interceptors.response.use(
           if (error.config) return api(error.config)
         } else {
           console.log('Auth could not be refreshed.')
-          navigateTo('/login')
+          if (!location.pathname.includes('login') && !location.pathname.includes('register')) {
+            navigateTo('/login')
+          }
         }
         break
 
