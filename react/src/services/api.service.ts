@@ -1,4 +1,4 @@
-import axios, {AxiosError, type AxiosRequestConfig, type CreateAxiosDefaults} from "axios";
+import axios, {AxiosError} from "axios";
 import {config} from "../config.ts";
 import {useAuthState} from "../hooks/AuthState.ts";
 import {navigateTo} from "../hooks/Navigation.ts";
