@@ -37,3 +37,10 @@ export interface IInviteEventMember {
   email: string,
   roles: Role[],
 }
+
+
+export interface IEventInvitation {
+  token: string,
+  eventName: string,
+  roles: Role[],
+}

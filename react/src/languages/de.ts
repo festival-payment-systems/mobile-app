@@ -59,6 +59,7 @@ const de = {
   "emails not found": "Emails nicht gefunden!",
   "cancelled": "Abgesagt",
   "add at least one email": "Füge mindestens eine Email hinzu.",
+  "event invitations": "Event Einladungen",
 }
 
 export default de

@@ -59,6 +59,7 @@ const enUs = {
   "emails not found": "emails not found!",
   "cancelled": "Cancelled",
   "add at least one email": "Add at least one email.",
+  "event invitations": "Event Invitations",
 }
 
 export default enUs
