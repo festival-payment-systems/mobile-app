@@ -57,6 +57,8 @@ const enUs = {
   "not valid email": "Not an valid email!",
   "invalid invites": "invalid invites!",
   "emails not found": "emails not found!",
+  "cancelled": "Cancelled",
+  "add at least one email": "Add at least one email.",
 }
 
 export default enUs

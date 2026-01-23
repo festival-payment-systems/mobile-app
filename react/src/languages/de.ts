@@ -38,7 +38,7 @@ const de = {
   "settings": "Einstellungen",
   "name": "Name",
   "events": "Events",
-  "unknown": "Unknown",
+  "unknown": "Unbekannt",
   "new password": "Neues Passwort",
   "language": "Sprache",
   "dark": "Dunkel",
@@ -57,6 +57,8 @@ const de = {
   "not valid email": "Keine gültige Email!",
   "invalid invites": "Einladungen waren ungültig!",
   "emails not found": "Emails nicht gefunden!",
+  "cancelled": "Abgesagt",
+  "add at least one email": "Füge mindestens eine Email hinzu.",
 }
 
 export default de

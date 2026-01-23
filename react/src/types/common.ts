@@ -19,3 +19,13 @@ export interface TagEvent {
   techTypes?: string[];
   id?: string;
 }
+
+/**
+ * Normal guests have no role.
+ * - **OWNER:** Creator of the event
+ * - **ORGANIZER:** --> Manager/Organizer for the event
+ * - **EVENT_CASHIER:** --> Cashier for the event
+ * - **VENDOR:** --> Owner of a shop
+ * - **VENDOR_CASHIER:** --> Cashier of a shop
+ */
+export type Role = 'OWNER' | 'ORGANIZER' | 'EVENT_CASHIER' | 'VENDOR' | 'VENDOR_CASHIER'
