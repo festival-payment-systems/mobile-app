@@ -1,4 +1,8 @@
-import type {Timestamps} from "./common.ts";
+import type {Role, Timestamps} from "./common.ts";
+
+
+export type EventStatus = 'UNKNOWN' | 'UPCOMING' | 'ONGOING' | 'COMPLETED' | 'CANCELLED'
+
 
 export interface IEvent {
   id: string,
@@ -7,6 +11,7 @@ export interface IEvent {
   startingAt?: string,
   /** yyyy-MM-dd */
   endingAt?: string,
+  status: EventStatus,
   timestamps: Timestamps,
 }
 
@@ -25,4 +30,17 @@ export interface IEventMember {
   "userId": string,
   "eventId": string,
   "timestamps": Timestamps,
+}
+
+
+export interface IInviteEventMember {
+  email: string,
+  roles: Role[],
+}
+
+
+export interface IEventInvitation {
+  token: string,
+  eventName: string,
+  roles: Role[],
 }

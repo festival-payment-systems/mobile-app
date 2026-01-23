@@ -12,8 +12,9 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import SendIcon from '@mui/icons-material/Send';
 import {useTranslation} from "react-i18next";
 import {api} from "../../services/api.service.ts";
-import type {IEvent} from "../../types/Event.ts";
+import type {IEvent, IInviteEventMember} from "../../types/Event.ts";
 import type {AxiosError} from "axios";
+import {EmailRegex} from "../../utils/Regex.ts";
 
 
 interface Props {
@@ -26,22 +27,22 @@ function EventMemberInvite({ event }: Props) {
   const theme = useTheme()
   const isSm = useMediaQuery(theme.breakpoints.only('sm'))
 
-  const [emails, setEmails] = useState<string[]>([])
+  const [invites, setInvites] = useState<IInviteEventMember[]>([])
   const [newEmail, setNewEmail] = useState<string>('')
   const [newEmailError, setNewEmailError] = useState<string>('')
 
   function handleAddEmail() {
-    if (!newEmail.match("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+    if (!newEmail.match(EmailRegex)) {
       setNewEmailError(t('not valid email'))
       return
     }
 
-    setEmails(p => [newEmail, ...p])
+    setInvites(p => [{email: newEmail, roles: ['VENDOR']}, ...p])
     setNewEmail('')
   }
 
   function removeEmail(email: string) {
-    setEmails(p => p.filter(e => e !== email))
+    setInvites(p => p.filter(e => e.email !== email))
   }
 
   function onNewEmailKeyDown(key: string) {
@@ -59,18 +60,18 @@ function EventMemberInvite({ event }: Props) {
     const emailsNotFound: string[] = []
     const unsuccessfulEmails: string[] = []
 
-    for (let email of emails) {
+    for (let invite of invites) {
       try {
-        await api.post(`events/${event.id}/members/invite`, {email})
+        await api.post(`events/${event.id}/members/invite`, invite)
       } catch (e) {
         const error: AxiosError = e as AxiosError
-        if (error.status === 404) emailsNotFound.push(email)
-        else unsuccessfulEmails.push(email)
+        if (error.status === 404) emailsNotFound.push(invite.email)
+        else unsuccessfulEmails.push(invite.email)
       }
     }
 
-    setEmails(p => p.filter(e => [...emailsNotFound, ...unsuccessfulEmails].find(u => u === e)))
-    setNewEmailError(`${emailsNotFound.length} ${t('emails not found')} and ${unsuccessfulEmails.length} ${t('invalid invites')}`)
+    setInvites(p => p.filter(e => [...emailsNotFound, ...unsuccessfulEmails].find(u => u === e.email)))
+    if (emailsNotFound.length + unsuccessfulEmails.length > 0) setNewEmailError(`${emailsNotFound.length} ${t('emails not found')} and ${unsuccessfulEmails.length} ${t('invalid invites')}`)
   }
 
   function onChangeEmail(value: string) {
@@ -104,9 +105,11 @@ function EventMemberInvite({ event }: Props) {
             }
           }}
         />
-        <Button onClick={onInviteSubmit} variant={'contained'}>
-          {t('send invites')}
-        </Button>
+        <Tooltip title={invites.length === 0 ? t('add at least one email') : t('send invites')}>
+          <Button onClick={onInviteSubmit} variant={'contained'} disabled={invites.length === 0}>
+            {t('send invites')}
+          </Button>
+        </Tooltip>
       </Box>
 
       <Typography variant={'subtitle2'} color={'error'}>
@@ -114,15 +117,15 @@ function EventMemberInvite({ event }: Props) {
       </Typography>
 
       <Grid container spacing={1} mt={1}>
-        {emails.map((email, index) => (
-          <Grid key={email} size={{xs: 12, sm: 6, md: 4}}>
+        {invites.map((invite, index) => (
+          <Grid key={invite.email} size={{xs: 12, sm: 6, md: 4}}>
             <Tooltip title={t('remove')}>
               <Button
                 variant={indexBasedStyling(index) ? 'contained' : 'text'} fullWidth
                 sx={{textTransform: 'none'}} size={'large'} color={'inherit'}
-                onClick={() => removeEmail(email)}
+                onClick={() => removeEmail(invite.email)}
               >
-                {email}
+                {invite.email}
               </Button>
             </Tooltip>
           </Grid>

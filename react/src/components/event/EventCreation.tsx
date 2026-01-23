@@ -6,7 +6,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
+  DialogTitle, Grid,
   TextField,
   Typography
 } from "@mui/material";
@@ -84,25 +84,31 @@ function EventCreation({open, onClose}: Props) {
       <DialogTitle>{t('create event')}</DialogTitle>
 
       <DialogContent>
-        <TextField
-          label={t('event name')} fullWidth autoFocus disabled={EventCreationMutation.isPending}
-          margin='normal' value={title} error={errorType === 'title'}
-          onChange={e => setTitle(e.currentTarget.value)}
-        />
+        <Grid container>
+          <Grid size={12}>
+            <TextField
+              label={t('event name')} fullWidth autoFocus disabled={EventCreationMutation.isPending}
+              margin='normal' value={title} error={errorType === 'title'}
+              onChange={e => setTitle(e.currentTarget.value)}
+            />
+          </Grid>
 
-        <Box display={'flex'} justifyContent={'space-between'} gap={2}>
-          <TextField
-            type={'date'} disabled={EventCreationMutation.isPending} value={dateToString(new Date(startDate))}
-            onChange={e => handleDateChange(e, setStartDate)}
-            label={t('starting at')} margin='normal' fullWidth error={errorType === 'startDate'}
-          />
+          <Grid size={{ xs: 12, sm: 6 }} pr={{ xs: 0, sm: 1 }}>
+            <TextField
+              type={'date'} disabled={EventCreationMutation.isPending} value={dateToString(new Date(startDate))}
+              onChange={e => handleDateChange(e, setStartDate)}
+              label={t('starting at')} margin='normal' fullWidth error={errorType === 'startDate'}
+            />
+          </Grid>
 
-          <TextField
-            type={'date'} disabled={EventCreationMutation.isPending} value={dateToString(new Date(endDate))}
-            onChange={e => handleDateChange(e, setEndDate)}
-            label={t('ending at')} margin='normal' fullWidth error={errorType === 'endDate'}
-          />
-        </Box>
+          <Grid size={{ xs: 12, sm: 6 }} pl={{ xs: 0, sm: 1 }}>
+            <TextField
+              type={'date'} disabled={EventCreationMutation.isPending} value={dateToString(new Date(endDate))}
+              onChange={e => handleDateChange(e, setEndDate)}
+              label={t('ending at')} margin='normal' fullWidth error={errorType === 'endDate'}
+            />
+          </Grid>
+        </Grid>
       </DialogContent>
 
       <Box sx={{display: 'flex', alignItems: 'center', gap: 0.5, justifyContent: 'center', marginBottom: 1}}>

@@ -18,7 +18,7 @@ function EventCard({ event, index }: Props) {
   const { t } = useTranslation()
   const startDate = event.startingAt ? getMillisFromDateString(event.startingAt) : Date.parse(event.timestamps.createdAt)
   const endDate = event.endingAt ? getMillisFromDateString(event.endingAt) : undefined
-  const { label, color } = getStatusProps(startDate, endDate);
+  const { color } = getStatusProps(event.status)
 
   return (
     <MotionPaper
@@ -40,7 +40,7 @@ function EventCard({ event, index }: Props) {
       onClick={() => nav(`/event/${event.id}/dashboard`)}
     >
       <Chip
-        label={t(label)}
+        label={t(event.status.toLowerCase())}
         size="small"
         color={color}
         sx={{
@@ -62,7 +62,7 @@ function EventCard({ event, index }: Props) {
         </Typography>
       )}
 
-      {label !== 'upcoming' && (
+      {event.status !== 'UPCOMING' && (
         <Typography variant="body2" sx={{ opacity: 0.8, mt: 1 }}>
           {t('total revenue')}: {0} €
         </Typography>
