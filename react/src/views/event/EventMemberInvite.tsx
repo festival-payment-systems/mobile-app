@@ -14,6 +14,7 @@ import {useTranslation} from "react-i18next";
 import {api} from "../../services/api.service.ts";
 import type {IEvent, IInviteEventMember} from "../../types/Event.ts";
 import type {AxiosError} from "axios";
+import {EmailRegex} from "../../utils/Regex.ts";
 
 
 interface Props {
@@ -31,7 +32,7 @@ function EventMemberInvite({ event }: Props) {
   const [newEmailError, setNewEmailError] = useState<string>('')
 
   function handleAddEmail() {
-    if (!newEmail.match("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+    if (!newEmail.match(EmailRegex)) {
       setNewEmailError(t('not valid email'))
       return
     }
