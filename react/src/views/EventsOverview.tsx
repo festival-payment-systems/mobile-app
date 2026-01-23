@@ -6,7 +6,7 @@ import {
   Typography,
   useMediaQuery, useTheme
 } from "@mui/material";
-import {lazy, useState} from "react";
+import {lazy, useEffect, useState} from "react";
 import EventCard from "../components/event/EventCard.tsx";
 import {MotionFab} from "../components/Motion.tsx";
 import AddIcon from '@mui/icons-material/Add';
@@ -45,6 +45,11 @@ function EventsOverview() {
 
   const [eventCreation, setEventCreation] = useState<boolean>(false)
   const [eventInvitations, setEventInvitations] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (!InvitationsQuery.isSuccess || InvitationsQuery.data.length === 0)
+      setEventInvitations(false)
+  }, [InvitationsQuery.data]);
 
   return (
     <Container maxWidth='md' sx={{width: '100vw', justifyItems: 'center'}}>

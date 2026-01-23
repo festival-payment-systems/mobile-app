@@ -60,6 +60,8 @@ const de = {
   "cancelled": "Abgesagt",
   "add at least one email": "Füge mindestens eine Email hinzu.",
   "event invitations": "Event Einladungen",
+  "accept": "Annehmen",
+  "decline": "Ablehnen",
 }
 
 export default de

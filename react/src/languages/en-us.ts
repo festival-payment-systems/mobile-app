@@ -60,6 +60,8 @@ const enUs = {
   "cancelled": "Cancelled",
   "add at least one email": "Add at least one email.",
   "event invitations": "Event Invitations",
+  "accept": "Accept",
+  "decline": "Decline",
 }
 
 export default enUs
