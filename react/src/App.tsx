@@ -44,6 +44,7 @@ function EventNavigation() {
       <Route path={"/dashboard"} element={<EventOverview event={EventQuery.data}/>} />
       <Route path={"/members"} element={<EventMembers event={EventQuery.data}/>}/>
       <Route path={"/members/invite"} element={<EventMemberInvite event={EventQuery.data}/>}/>
+      <Route path={"/members/invite/wristband"} element={<NfcProtected neededRole={'Customer'} isRegister>Successful</NfcProtected>} />
     </Routes>
   )
 }

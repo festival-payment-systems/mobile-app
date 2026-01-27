@@ -62,6 +62,13 @@ const de = {
   "event invitations": "Event Einladungen",
   "accept": "Annehmen",
   "decline": "Ablehnen",
+  "register wristband for": "Registriere Armband für:",
+  "customer": "Gast",
+  "organizer": "Veranstalter:in",
+  "merchant": "Händler:in",
+  "seller": "Verkäufer:in",
+  "cashier": "Kassierer:in",
+  "register wristband": "Registriere Armband.",
 }
 
 export default de
