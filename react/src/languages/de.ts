@@ -63,11 +63,13 @@ const de = {
   "accept": "Annehmen",
   "decline": "Ablehnen",
   "register wristband for": "Registriere Armband für",
-  "customer": "Gast",
+  "customer": "Kunde",
   "organizer": "Veranstalter:in",
   "merchant": "Händler:in",
   "seller": "Verkäufer:in",
   "cashier": "Kassierer:in",
+  "guest": "Gast",
+  "owner": "Besitzer",
   "register wristband": "Registriere Armband.",
 }
 

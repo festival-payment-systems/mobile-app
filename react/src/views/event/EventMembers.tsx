@@ -3,7 +3,7 @@ import {Box, CircularProgress, Container, TextField, Tooltip, Typography, useMed
 import {useState} from "react";
 import {useQuery} from "@tanstack/react-query";
 import {api} from "../../services/api.service.ts";
-import EventMemberCard from "./EventMemberCard.tsx";
+import EventMemberCard from "../../components/event/EventMemberCard.tsx";
 import {MotionFab} from "../../components/Motion.tsx";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import {useTranslation} from "react-i18next";

@@ -68,6 +68,8 @@ const enUs = {
   "merchant": "Merchant",
   "seller": "Seller",
   "cashier": "Cashier",
+  "guest": "Guest",
+  "owner": "Owner",
   "register wristband": "Register Wristband.",
 }
 
