@@ -71,6 +71,8 @@ const de = {
   "guest": "Gast",
   "owner": "Besitzer",
   "register wristband": "Registriere Armband.",
+  "vendor": "Verkäufer:in",
+  "vendor_cashier": "Laden Kassierer:in",
 }
 
 export default de

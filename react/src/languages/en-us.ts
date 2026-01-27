@@ -71,6 +71,8 @@ const enUs = {
   "guest": "Guest",
   "owner": "Owner",
   "register wristband": "Register Wristband.",
+  "vendor": "Vendor",
+  "vendor_cashier": "Vendor Cashier",
 }
 
 export default enUs
