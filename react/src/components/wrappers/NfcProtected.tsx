@@ -5,13 +5,13 @@ import {MotionBox} from "../Motion.tsx";
 import {setAppBarVisible} from "../../hooks/Navigation.ts";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
-import type {TagEvent} from "../../types/common.ts";
+import type {Role, TagEvent} from "../../types/common.ts";
 import type {AppSchema} from "../../../../Bridge.ts";
 import {useAppState} from "../../hooks/AppState.ts";
 import {useAuthState} from "../../hooks/AuthState.ts";
 import {api} from "../../services/api.service.ts";
 
-function NfcReadScreen({ label }: {label: string}) {
+function NfcReadScreen({ neededRole, label }: {neededRole: Role, label?: string}) {
 
   const nav = useNavigate()
   const { t } = useTranslation()
@@ -35,10 +35,15 @@ function NfcReadScreen({ label }: {label: string}) {
           pb: 6,
         }}
       >
-        <Typography variant="h4" sx={{ fontWeight: 600, mb: 1 }}>
-          {label}
+        {label && (
+          <Typography variant="h5" component={'h2'} justifyContent={'center'} sx={{ fontWeight: 600, mb: 1 }}>
+            {label}
+          </Typography>
+        )}
+        <Typography variant="h4" component={'h3'} justifyContent={'center'} sx={{ fontWeight: 600, mb: 1 }}>
+          {t(neededRole.toLowerCase())}
         </Typography>
-        <Typography variant="body1" sx={{ color: 'grey.500', fontSize: '1.1rem' }}>
+        <Typography variant="body1" justifyContent={'center'} sx={{ color: 'grey.500', fontSize: '1.1rem' }}>
           {t('hold wristband to device')}
         </Typography>
       </Box>
@@ -124,7 +129,7 @@ function NfcReadScreen({ label }: {label: string}) {
 
 interface Props {
   children: ReactNode,
-  neededRole: 'Organizer' | 'Merchant' | 'Seller' | 'Cashier' | 'Customer',
+  neededRole: Role,
   isRegister?: boolean,
 }
 
@@ -215,7 +220,8 @@ function NfcProtected({ children, neededRole, isRegister }: Props) {
 
   if (!nfcData || isRegister) return (
     <NfcReadScreen
-      label={isRegister ? t('register wristband for') + ' ' + t(neededRole.toLowerCase()) : t(neededRole.toLowerCase())}
+      neededRole={neededRole}
+      label={t('register wristband for')}
     />
   )
 

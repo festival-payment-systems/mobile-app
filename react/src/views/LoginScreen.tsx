@@ -66,7 +66,7 @@ function LoginScreen() {
 
           <TextField
             label={t('password')} type="password" fullWidth variant="outlined" error={error.length > 0}
-            onKeyDown={handleKeyDown} autoComplete={'current-password'}
+            onKeyDown={handleKeyDown} autoComplete={'password'}
             value={password} onChange={e => setPassword(e.currentTarget.value)}
           />
 

@@ -62,7 +62,7 @@ const enUs = {
   "event invitations": "Event Invitations",
   "accept": "Accept",
   "decline": "Decline",
-  "register wristband for": "Register Wristband for:",
+  "register wristband for": "Register Wristband for",
   "customer": "Customer",
   "organizer": "Organizer",
   "merchant": "Merchant",

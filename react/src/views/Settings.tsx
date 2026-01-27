@@ -1,8 +1,8 @@
-import React, {type ChangeEvent, useState} from 'react';
+import React, {useState} from 'react';
 import {useAppState} from "../hooks/AppState.ts";
 import {useAuthState} from "../hooks/AuthState.ts";
 import {Button, Container, FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
-import type {MinimalUser, UpdateUser} from "../types/User.ts";
+import type {UpdateUser} from "../types/User.ts";
 import { useTranslation } from "react-i18next";
 import ToggleTextField from "../components/ToggleTextField.tsx";
 import { Navigate } from "react-router";

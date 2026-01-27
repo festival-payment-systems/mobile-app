@@ -32,6 +32,7 @@ function EventsOverview() {
   const {t} = useTranslation()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+
   const EventsQuery = useQuery({
     queryKey: ['events'],
     queryFn: async () => (await api.get<IEvent[]>('events')).data,
