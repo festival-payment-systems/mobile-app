@@ -132,6 +132,10 @@ interface BridgeState extends Bridge {
   getNfc: () => Promise<TagEvent | null>
 }
 
+interface Nfc {
+  id?: string,
+}
+
 const bridge = linkBridge<BridgeStore<BridgeState>, AppSchema>({
   throwOnError: true,
   onReady: async (method) => {
@@ -150,9 +154,9 @@ function NfcProtected({ children, neededRole, isRegister }: Props) {
   const Auth = useAuthState()
   const nav = useNavigate()
   const { t } = useTranslation()
-  const [nfcData, setNfcData] = useState<object | null>(null)
+  const [nfcData, setNfcData] = useState<Nfc | null>(null)
 
-  async function registerNfc() {
+  async function registerNfc(data: Nfc) {
     if (!App.selectedEvent) {
       console.warn("No event selected while registerNfc")
       return false
@@ -163,31 +167,32 @@ function NfcProtected({ children, neededRole, isRegister }: Props) {
       return false
     }
 
-    if (!nfcData) {
-      console.warn("No Nfc data while registerNFc")
-      return false
-    }
+    const nfcId: string = data.id ?? JSON.stringify(data)
+    console.log(`Send wristband register with id '${nfcId}'`)
 
     const response = await api.post(`events/${App.selectedEvent.id}/wristbands/register`, {
-      "id": JSON.stringify(nfcData),
+      "id": nfcId,
       //"actorId": Auth.user.id, // Not needed for guests
     })
 
     if (response.status == 200) {
+      console.log(`Nfc register was successful for id '${nfcId}'`)
       return true
     }
 
-    console.warn('Wristband register NOT successful.')
+    console.log('Wristband register NOT successful.')
     return false
   }
 
   useEffect(() => {
-    setAppBarVisible(!!nfcData)
-    if (!nfcData) {
+    setAppBarVisible(!!nfcData && !isRegister)
+    if (nfcData === null) {
+      console.log("No NfcData, starting to read ...")
       // This does not always return the tag, that's why we use the event listener
       bridge.getNfc().then((tag) => console.log('Nfc reading done ', tag))
     } else {
-      registerNfc().then(success => success && nav('/members/invite/wristband'))
+      console.log("Try to register nfc ...")
+      registerNfc(nfcData).then(() => nav(-1))
     }
 
     return () => {
@@ -197,8 +202,9 @@ function NfcProtected({ children, neededRole, isRegister }: Props) {
 
   useEffect(() => {
     bridge.addEventListener('nfcReadResponse', (v) => {
-      const data = v as any
-      setNfcData(data)
+      console.log("New nfc data received!")
+      if (v.tag && !v.error)
+        setNfcData(JSON.parse(v.tag))
     })
   }, []);
 

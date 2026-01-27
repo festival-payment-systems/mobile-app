@@ -75,7 +75,7 @@ function EventMembers({ event }: Props) {
 
       <Tooltip title={t('register wristband')} arrow placement={'auto'}>
         <MotionFab
-          color="primary"
+          color="secondary"
           aria-label={t('register wristband')}
           sx={{
             position: 'fixed',
@@ -87,7 +87,7 @@ function EventMembers({ event }: Props) {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.5 }}
-          onClick={() => nav('invite')}
+          onClick={() => nav(`/event/${App.selectedEvent?.id}/members/invite/wristband`)}
           disabled={!App.isBridgeReady}
         >
           <NfcIcon fontSize={isMobile ? 'medium' : 'large'} />
