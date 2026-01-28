@@ -11,6 +11,7 @@ import type {IEvent} from "./types/Event.ts";
 import {CircularProgress, createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import {useAppState} from "./hooks/AppState.ts";
 import {useAuthState} from "./hooks/AuthState.ts";
+import EventsOverview from "./views/EventsOverview.tsx";
 
 
 const EventOverview = lazy(() => import('./views/event/EventOverview.tsx'))
@@ -44,7 +45,7 @@ function EventNavigation() {
       <Route path={"/dashboard"} element={<EventOverview event={EventQuery.data}/>} />
       <Route path={"/members"} element={<EventMembers event={EventQuery.data}/>}/>
       <Route path={"/members/invite"} element={<EventMemberInvite event={EventQuery.data}/>}/>
-      <Route path={"/members/invite/wristband"} element={<NfcProtected neededRole={'Customer'} isRegister>Successful</NfcProtected>} />
+      <Route path={"/members/invite/wristband"} element={<NfcProtected neededRole={'GUEST'} isRegister>Successful</NfcProtected>} />
     </Routes>
   )
 }
@@ -52,8 +53,8 @@ function EventNavigation() {
 
 const Login = lazy(() => import('./views/LoginScreen.tsx'))
 const Register = lazy(() => import('./views/RegisterScreen.tsx'))
-const EventsOverview = lazy(() => import('./views/EventsOverview.tsx'))
 const Settings = lazy(() => import('./views/Settings.tsx'))
+
 
 function App() {
 
@@ -114,7 +115,7 @@ function App() {
           <Route path={'events'} element={<AuthProtected><EventsOverview/></AuthProtected>}/>
           <Route path={'event/:eventId/*'} element={<AuthProtected><EventNavigation/></AuthProtected>}/>
           <Route path={'nfc-test'}
-                 element={<NfcProtected neededRole={'Customer'}><h2>Successful NFC read!</h2></NfcProtected>}/>
+                 element={<NfcProtected neededRole={'GUEST'}><h2>Successful NFC read!</h2></NfcProtected>}/>
           <Route path={'*'} element={<p>Page not found</p>}/>
         </Route>
       </Routes>

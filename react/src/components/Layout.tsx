@@ -6,6 +6,7 @@ import {setAppBarVisibleFn, setRouteTitleFn} from "../hooks/Navigation.ts";
 import MenuIcon from '@mui/icons-material/Menu';
 import {useAppState} from "../hooks/AppState.ts";
 import {config} from "../config.ts";
+import LoadingBox from "./LoadingBox.tsx";
 
 const noNav: string[] = ['login', 'register']
 /** All paths that use the account (now settings) button left in the AppBar **/
@@ -100,7 +101,7 @@ function Layout() {
           </Toolbar>
         </AppBar>
       )}
-      <Suspense fallback={<h2>{t('loading')}</h2>}>
+      <Suspense fallback={null}>
         <Outlet/>
       </Suspense>
     </>

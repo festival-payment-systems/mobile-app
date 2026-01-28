@@ -15,20 +15,28 @@ const organizerNavs: Nav[] = [
   { title: 'transactions', path: '/transactions' },
   { title: 'members', path: '/members' },
   { title: 'shops', path: '/shops' },
+  { title: 'cash register', path: '/cash-register' },
 ]
 
 function NavButton({ title, path }: Nav) {
 
   const App = useAppState()
   const nav = useNavigate()
-  const { t } = useTranslation()
+
+  function handleClick() {
+    if (App.selectedEvent) {
+      nav(`/event/${App.selectedEvent.id}${path}`)
+    } else {
+      nav('/events')
+    }
+  }
 
   return (
     <Button
       variant={'outlined'} fullWidth
-      onClick={() => nav(`/event/${App.selectedEvent?.id}${path}`)}
+      onClick={handleClick}
     >
-      {t(title)}
+      {title}
     </Button>
   )
 }
@@ -50,7 +58,7 @@ function EventNavigation() {
   return (
     <Container maxWidth={'md'} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: Window.height - 128 }}>
       <Box display={'flex'} flexDirection={'column'} gap={2}>
-        {organizerNavs.map(n => <NavButton key={n.title} title={n.title} path={n.path}/>)}
+        {organizerNavs.map(n => <NavButton key={n.title} title={t(n.title)} path={n.path}/>)}
       </Box>
 
       <Box display={'flex'} flexDirection={'column'} gap={2}>

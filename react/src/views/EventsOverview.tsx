@@ -20,6 +20,7 @@ import {useNavigate} from "react-router";
 import NfcIcon from '@mui/icons-material/Nfc';
 import {useAppState} from "../hooks/AppState.ts";
 import {config} from "../config.ts";
+import LoadingBox from "../components/LoadingBox.tsx";
 
 
 const EventInvitations = lazy(() => import("../components/event/EventInvitations.tsx"))
@@ -74,11 +75,7 @@ function EventsOverview() {
           </Typography>
         )}
 
-        {EventsQuery.isLoading && (
-          <Typography>
-            {t('loading')}
-          </Typography>
-        )}
+        {EventsQuery.isLoading && <LoadingBox size={32}/>}
 
         {EventsQuery.isError && <>
             <Typography color={'error'}>
