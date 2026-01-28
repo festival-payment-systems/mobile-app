@@ -5,11 +5,13 @@ import {MotionBox} from "../Motion.tsx";
 import {setAppBarVisible} from "../../hooks/Navigation.ts";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
-import type {TagEvent} from "../../types/common.ts";
+import type {Role, TagEvent} from "../../types/common.ts";
 import type {AppSchema} from "../../../../Bridge.ts";
 import {useAppState} from "../../hooks/AppState.ts";
+import {useAuthState} from "../../hooks/AuthState.ts";
+import {api} from "../../services/api.service.ts";
 
-function NfcReadScreen() {
+function NfcReadScreen({ neededRole, label }: {neededRole: Role, label?: string}) {
 
   const nav = useNavigate()
   const { t } = useTranslation()
@@ -33,10 +35,15 @@ function NfcReadScreen() {
           pb: 6,
         }}
       >
-        <Typography variant="h4" sx={{ fontWeight: 600, mb: 1 }}>
-          Kunde
+        {label && (
+          <Typography variant="h5" component={'h2'} justifyContent={'center'} sx={{ fontWeight: 600, mb: 1 }}>
+            {label}
+          </Typography>
+        )}
+        <Typography variant="h4" component={'h3'} justifyContent={'center'} sx={{ fontWeight: 600, mb: 1 }}>
+          {t(neededRole.toLowerCase())}
         </Typography>
-        <Typography variant="body1" sx={{ color: 'grey.500', fontSize: '1.1rem' }}>
+        <Typography variant="body1" justifyContent={'center'} sx={{ color: 'grey.500', fontSize: '1.1rem' }}>
           {t('hold wristband to device')}
         </Typography>
       </Box>
@@ -122,11 +129,16 @@ function NfcReadScreen() {
 
 interface Props {
   children: ReactNode,
-  neededRole: 'Organizer' | 'Merchant' | 'Seller' | 'Cashier' | 'Customer',
+  neededRole: Role,
+  isRegister?: boolean,
 }
 
 interface BridgeState extends Bridge {
   getNfc: () => Promise<TagEvent | null>
+}
+
+interface Nfc {
+  id?: string,
 }
 
 const bridge = linkBridge<BridgeStore<BridgeState>, AppSchema>({
@@ -141,17 +153,51 @@ const bridge = linkBridge<BridgeStore<BridgeState>, AppSchema>({
   }
 })
 
-function NfcProtected({ children, neededRole }: Props) {
+function NfcProtected({ children, neededRole, isRegister }: Props) {
 
   const App = useAppState()
+  const Auth = useAuthState()
   const nav = useNavigate()
-  const [nfcData, setNfcData] = useState<object | null>(null)
+  const { t } = useTranslation()
+  const [nfcData, setNfcData] = useState<Nfc | null>(null)
+
+  async function registerNfc(data: Nfc) {
+    if (!App.selectedEvent) {
+      console.warn("No event selected while registerNfc")
+      return false
+    }
+
+    if (!Auth.user) {
+      console.warn("User not authed while registerNfc")
+      return false
+    }
+
+    const nfcId: string = data.id ?? JSON.stringify(data)
+    console.log(`Send wristband register with id '${nfcId}'`)
+
+    const response = await api.post(`events/${App.selectedEvent.id}/wristbands/register`, {
+      "id": nfcId,
+      //"actorId": Auth.user.id, // Not needed for guests
+    })
+
+    if (response.status == 200) {
+      console.log(`Nfc register was successful for id '${nfcId}'`)
+      return true
+    }
+
+    console.log('Wristband register NOT successful.')
+    return false
+  }
 
   useEffect(() => {
-    setAppBarVisible(!!nfcData)
-    if (!nfcData) {
+    setAppBarVisible(!!nfcData && !isRegister)
+    if (nfcData === null) {
+      console.log("No NfcData, starting to read ...")
       // This does not always return the tag, that's why we use the event listener
       bridge.getNfc().then((tag) => console.log('Nfc reading done ', tag))
+    } else {
+      console.log("Try to register nfc ...")
+      registerNfc(nfcData).then(() => nav(-1))
     }
 
     return () => {
@@ -161,8 +207,9 @@ function NfcProtected({ children, neededRole }: Props) {
 
   useEffect(() => {
     bridge.addEventListener('nfcReadResponse', (v) => {
-      const data = v as any
-      setNfcData(data)
+      console.log("New nfc data received!")
+      if (v.tag && !v.error)
+        setNfcData(JSON.parse(v.tag))
     })
   }, []);
 
@@ -171,8 +218,11 @@ function NfcProtected({ children, neededRole }: Props) {
     return <h3>No NFC connection found.</h3>
   }
 
-  if (!nfcData) return (
-    <NfcReadScreen/>
+  if (!nfcData || isRegister) return (
+    <NfcReadScreen
+      neededRole={neededRole}
+      label={t('register wristband for')}
+    />
   )
 
   return children

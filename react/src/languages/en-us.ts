@@ -62,6 +62,17 @@ const enUs = {
   "event invitations": "Event Invitations",
   "accept": "Accept",
   "decline": "Decline",
+  "register wristband for": "Register Wristband for",
+  "customer": "Customer",
+  "organizer": "Organizer",
+  "merchant": "Merchant",
+  "seller": "Seller",
+  "cashier": "Cashier",
+  "guest": "Guest",
+  "owner": "Owner",
+  "register wristband": "Register Wristband.",
+  "vendor": "Vendor",
+  "vendor_cashier": "Vendor Cashier",
 }
 
 export default enUs

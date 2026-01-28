@@ -3,7 +3,7 @@ interface IAppConfig {
 }
 
 const AppConfig: IAppConfig = {
-  webview_url: 'http://10.114.105.31:5173/'
+  webview_url: 'http://192.168.178.84:5173/',
 }
 
 

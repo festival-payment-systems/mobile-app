@@ -28,4 +28,4 @@ export interface TagEvent {
  * - **VENDOR:** --> Owner of a shop
  * - **VENDOR_CASHIER:** --> Cashier of a shop
  */
-export type Role = 'OWNER' | 'ORGANIZER' | 'EVENT_CASHIER' | 'VENDOR' | 'VENDOR_CASHIER'
+export type Role = 'OWNER' | 'ORGANIZER' | 'EVENT_CASHIER' | 'VENDOR' | 'VENDOR_CASHIER' | 'GUEST'

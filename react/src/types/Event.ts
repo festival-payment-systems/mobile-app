@@ -29,6 +29,7 @@ export interface IEventMember {
   "id": string,
   "userId": string,
   "eventId": string,
+  "roles": Role[],
   "timestamps": Timestamps,
 }
 

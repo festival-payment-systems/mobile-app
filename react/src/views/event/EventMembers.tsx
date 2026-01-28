@@ -3,11 +3,13 @@ import {Box, CircularProgress, Container, TextField, Tooltip, Typography, useMed
 import {useState} from "react";
 import {useQuery} from "@tanstack/react-query";
 import {api} from "../../services/api.service.ts";
-import EventMemberCard from "./EventMemberCard.tsx";
+import EventMemberCard from "../../components/event/EventMemberCard.tsx";
 import {MotionFab} from "../../components/Motion.tsx";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
+import NfcIcon from '@mui/icons-material/Nfc';
+import {useAppState} from "../../hooks/AppState.ts";
 
 interface Props {
   event: IEvent,
@@ -15,6 +17,7 @@ interface Props {
 
 function EventMembers({ event }: Props) {
 
+  const App = useAppState()
   const { t } = useTranslation()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
@@ -67,6 +70,27 @@ function EventMembers({ event }: Props) {
           onClick={() => nav('invite')}
         >
           <PersonAddIcon fontSize={isMobile ? 'medium' : 'large'} />
+        </MotionFab>
+      </Tooltip>
+
+      <Tooltip title={t('register wristband')} arrow placement={'auto'}>
+        <MotionFab
+          color="secondary"
+          aria-label={t('register wristband')}
+          sx={{
+            position: 'fixed',
+            bottom: isMobile ? 20 : 40,
+            left: isMobile ? 20 : 40,
+            width: isMobile ? 56 : 70,
+            height: isMobile ? 56 : 70,
+          }}
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.5 }}
+          onClick={() => nav(`/event/${App.selectedEvent?.id}/members/invite/wristband`)}
+          disabled={!App.isBridgeReady}
+        >
+          <NfcIcon fontSize={isMobile ? 'medium' : 'large'} />
         </MotionFab>
       </Tooltip>
     </Container>

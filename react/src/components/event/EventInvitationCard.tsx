@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import type {IEventInvitation} from "../../types/Event.ts";
-import {Box, Button, Card, CardActions, CardContent, CardHeader, CircularProgress, Typography} from "@mui/material";
+import {Box, Button, Card, CircularProgress, Typography} from "@mui/material";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {api} from "../../services/api.service.ts";
 import {useNavigate} from "react-router";
