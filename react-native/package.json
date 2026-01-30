@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "build-android": "react-native build-android --mode=release"
   },
   "dependencies": {
     "@webview-bridge/react-native": "^1.7.8",
