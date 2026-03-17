@@ -18,6 +18,7 @@ const EventOverview = lazy(() => import('./views/event/EventOverview.tsx'))
 const EventMembers = lazy(() => import('./views/event/EventMembers.tsx'))
 const EventNavScreen = lazy(() => import('./views/event/EventNavigation.tsx'))
 const EventMemberInvite = lazy(() => import('./views/event/EventMemberInvite.tsx'))
+const EventShops = lazy(() => import('./views/event/EventShops.tsx'))
 
 function EventNavigation() {
 
@@ -46,6 +47,7 @@ function EventNavigation() {
       <Route path={"/members"} element={<EventMembers event={EventQuery.data}/>}/>
       <Route path={"/members/invite"} element={<EventMemberInvite event={EventQuery.data}/>}/>
       <Route path={"/members/invite/wristband"} element={<NfcProtected neededRole={'GUEST'} isRegister>Successful</NfcProtected>} />
+      <Route path={"/shops"} element={<EventShops event={EventQuery.data}/>}/>
     </Routes>
   )
 }

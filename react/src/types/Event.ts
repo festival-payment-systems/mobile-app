@@ -13,6 +13,7 @@ export interface IEvent {
   endingAt?: string,
   status: EventStatus,
   timestamps: Timestamps,
+  shopIds?: string[],
 }
 
 

@@ -56,6 +56,12 @@ function EventCard({ event, index }: Props) {
         {event.name}
       </Typography>
 
+      {!!event.shopIds && (
+        <Typography variant="caption" sx={{ opacity: 0.6 }}>
+          {t('shops')}: {event.shopIds.length}
+        </Typography>
+      )}
+
       {endDate && (
         <Typography variant="caption" sx={{ opacity: 0.5 }}>
           {`${new Date(startDate).toDateString()} - ${new Date(endDate).toDateString()}`}

@@ -93,6 +93,12 @@ function EventCreation({open, onClose}: Props) {
             />
           </Grid>
 
+          <Grid size={12}>
+            <TextField
+              label={t('shops')} fullWidth disabled margin='normal'
+            />
+          </Grid>
+
           <Grid size={{ xs: 12, sm: 6 }} pr={{ xs: 0, sm: 1 }}>
             <TextField
               type={'date'} disabled={EventCreationMutation.isPending} value={dateToString(new Date(startDate))}
