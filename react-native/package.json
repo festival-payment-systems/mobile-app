@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@stripe/stripe-terminal-react-native": "^0.0.1-beta.29",
     "@webview-bridge/react-native": "^1.7.8",
     "react": "19.1.1",
     "react-native": "0.82.1",

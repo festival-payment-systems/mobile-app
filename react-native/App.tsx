@@ -1,5 +1,7 @@
-import {StatusBar, StyleSheet, useWindowDimensions, View} from 'react-native';
-import NfcManager, { NfcTech, TagEvent } from 'react-native-nfc-manager';
+
+
+/*
+import {import NfcManager, { NfcTech, TagEvent } from 'react-native-nfc-manager';
 import {
   Bridge,
   bridge, BridgeStore,
@@ -97,3 +99,35 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+StatusBar, StyleSheet, useWindowDimensions, View} from 'react-native';
+ */
+
+
+import React from 'react';
+import { StripeTerminalProvider } from '@stripe/stripe-terminal-react-native';
+import TapToPayScreen from './TapToPay.tsx'; // <- hier deinen echten Pfad einsetzen
+
+const API_URL = 'http://localhost:8080';
+
+export default function App() {
+  const fetchTokenProvider = async () => {
+    const response = await fetch(`${API_URL}/stripe/connection-token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const { secret } = await response.json();
+    return secret;
+  };
+
+  return (
+    <StripeTerminalProvider
+      logLevel="verbose"
+      tokenProvider={fetchTokenProvider}
+    >
+      <TapToPayScreen />
+    </StripeTerminalProvider>
+  );
+}
