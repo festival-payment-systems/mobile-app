@@ -5,7 +5,7 @@ import {useEffect, useState} from "react";
 import {setRouteTitle} from "../../hooks/Navigation.ts";
 import {MotionFab} from "../../components/Motion.tsx";
 import AddIcon from "@mui/icons-material/Add";
-import ShopCreation from "../../components/event/ShopCreation.tsx";
+import ShopCreation from "../../components/shop/ShopCreation.tsx";
 
 interface Props {
   event: IEvent,
