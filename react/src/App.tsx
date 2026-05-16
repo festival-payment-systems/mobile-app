@@ -1,56 +1,15 @@
-import {Navigate, Route, Routes, useLocation, useNavigate, useParams} from "react-router";
+import {Navigate, Route, Routes, useLocation, useNavigate} from "react-router";
 import Layout from "./components/Layout.tsx";
 import AuthProtected from "./components/wrappers/AuthProtected.tsx";
 import {lazy, useEffect, useState} from "react";
 import {setNavigateFn} from "./hooks/Navigation.ts";
 import {useTranslation} from "react-i18next";
 import NfcProtected from "./components/wrappers/NfcProtected.tsx";
-import {useQuery} from "@tanstack/react-query";
-import {api} from "./services/api.service.ts";
-import type {IEvent} from "./types/Event.ts";
-import {CircularProgress, createTheme, CssBaseline, ThemeProvider} from "@mui/material";
+import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import {useAppState} from "./hooks/AppState.ts";
 import {useAuthState} from "./hooks/AuthState.ts";
 import EventsOverview from "./views/EventsOverview.tsx";
-
-
-const EventOverview = lazy(() => import('./views/event/EventOverview.tsx'))
-const EventMembers = lazy(() => import('./views/event/EventMembers.tsx'))
-const EventNavScreen = lazy(() => import('./views/event/EventNavigation.tsx'))
-const EventMemberInvite = lazy(() => import('./views/event/EventMemberInvite.tsx'))
-const EventShops = lazy(() => import('./views/event/EventShops.tsx'))
-
-function EventNavigation() {
-
-  const {eventId} = useParams()
-  const App = useAppState()
-
-  const EventQuery = useQuery({
-    queryKey: ['event', eventId],
-    queryFn: async () => (await api.get<IEvent>(`events/${eventId}`)).data,
-    enabled: !!eventId,
-  })
-
-  useEffect(() => {
-    if (EventQuery.isSuccess) App.setSelectedEvent(EventQuery.data)
-    else App.setSelectedEvent(null)
-  }, [EventQuery.data]);
-
-  if (!eventId || EventQuery.isError) return <Navigate to={'/events'}/>
-
-  if (EventQuery.isLoading || !EventQuery.isSuccess || !App.selectedEvent) return <CircularProgress/>
-
-  return (
-    <Routes>
-      <Route index path={'/*'} element={<EventNavScreen />} />
-      <Route path={"/dashboard"} element={<EventOverview event={EventQuery.data}/>} />
-      <Route path={"/members"} element={<EventMembers event={EventQuery.data}/>}/>
-      <Route path={"/members/invite"} element={<EventMemberInvite event={EventQuery.data}/>}/>
-      <Route path={"/members/invite/wristband"} element={<NfcProtected neededRole={'GUEST'} isRegister>Successful</NfcProtected>} />
-      <Route path={"/shops"} element={<EventShops event={EventQuery.data}/>}/>
-    </Routes>
-  )
-}
+import EventRoutes from "./routes/EventRoutes.tsx";
 
 
 const Login = lazy(() => import('./views/LoginScreen.tsx'))
@@ -102,7 +61,7 @@ function App() {
     const loadedLanguage = localStorage.getItem('language')
     if (loadedLanguage && (loadedLanguage == 'en' || loadedLanguage == 'de')) App.changeLanguage(loadedLanguage)
 
-    Auth.refreshUserProfile()
+    Auth.refreshUserProfile().then(() => console.debug('User profile refreshed.'))
   }, []);
 
   return (
@@ -115,7 +74,7 @@ function App() {
           <Route path={'register'} element={<Register/>}/>
           <Route path={'settings'} element={<AuthProtected><Settings/></AuthProtected>}/>
           <Route path={'events'} element={<AuthProtected><EventsOverview/></AuthProtected>}/>
-          <Route path={'event/:eventId/*'} element={<AuthProtected><EventNavigation/></AuthProtected>}/>
+          <Route path={'event/:eventId/*'} element={<AuthProtected><EventRoutes/></AuthProtected>}/>
           <Route path={'nfc-test'}
                  element={<NfcProtected neededRole={'GUEST'}><h2>Successful NFC read!</h2></NfcProtected>}/>
           <Route path={'*'} element={<p>Page not found</p>}/>

@@ -1,11 +1,15 @@
 import type {IEvent} from "../../types/Event.ts";
-import {Container, Tooltip, Typography, useMediaQuery, useTheme} from "@mui/material";
+import {Box, Container, Tooltip, Typography, useMediaQuery, useTheme} from "@mui/material";
 import {useTranslation} from "react-i18next";
 import {useEffect, useState} from "react";
 import {setRouteTitle} from "../../hooks/Navigation.ts";
 import {MotionFab} from "../../components/Motion.tsx";
 import AddIcon from "@mui/icons-material/Add";
 import ShopCreation from "../../components/shop/ShopCreation.tsx";
+import {useQuery} from "@tanstack/react-query";
+import {api} from "../../services/api.service.ts";
+import type {IShop} from "../../types/Shop.ts";
+import ShopCard from "../../components/shop/ShopCard.tsx";
 
 interface Props {
   event: IEvent,
@@ -18,6 +22,11 @@ function EventShops({ event }: Props) {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [shopCreation, setShopCreation] = useState<boolean>(false)
 
+  const ShopsQuery = useQuery({
+    queryKey: ['shops'],
+    queryFn: async () => (await api.get<IShop[]>('shops')).data,
+  })
+
   useEffect(() => {
     setRouteTitle(t('shops'))
   }, []);
@@ -27,6 +36,24 @@ function EventShops({ event }: Props) {
       <Typography variant={'h2'} component={'h1'}>
         {t('shops')}: {event.shopIds?.length ?? 0}
       </Typography>
+
+      <Box maxWidth={theme.breakpoints.values.sm} width='100%'>
+        {ShopsQuery.isSuccess && ShopsQuery.data.map((s, i) => (
+          <ShopCard shop={s} index={i} />
+        ))}
+
+        {ShopsQuery.isSuccess && ShopsQuery.data.length <= 0 && (
+          <Typography variant={'h2'} component={'h1'}>
+            {t('no events')}
+          </Typography>
+        )}
+
+        {ShopsQuery.isError && <>
+            <Typography color={'error'}>
+              {ShopsQuery.error.message}
+            </Typography>
+        </>}
+      </Box>
 
       <Tooltip title={t('create shop')} arrow placement={'auto'}>
         <MotionFab
